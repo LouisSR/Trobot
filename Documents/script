@@ -1,0 +1,16 @@
+#!/bin/sh
+
+cd /Users/louissaint-raymond2/Desktop/Robopoly
+
+scp *.py robot pi@pirobot.local:Desktop/robot/
+
+ssh pi@pirobot.local '
+
+cd Desktop/robot/
+
+./robot
+
+exit
+'
+
+scp -r pi@pirobot.local:Desktop/robot/images .
