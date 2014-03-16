@@ -20,16 +20,16 @@ IR distance sensors:
 #include "robot.h" 
 
 /* Variable and constant declaration*/
-Servo servo1;
+Servo gripper;
 Servo servo2;
 LinearCamera LinCam = LinearCamera(5); // new instance of the camera, it works over i2c and the default address is "5"
 
 void setup()
 {
   //Pins initialization: input/output and low/high
-  pinMode(LED, OUTPUT);
+  pinMode(LED, OUTPUT); //LED13 on
   
-  servo1.attach(S1); // pin 6
+  gripper.attach(S1); // pin 6
   servo2.attach(S2); // pin 5
 
   Serial.begin(115200);   // open the USB serial port at 115200 bps:
@@ -45,25 +45,28 @@ void loop()
   int angle;
   
   //Check UART
-//  Send2Raspberry(data, length);
-//  if (ReceiveFromRaspberry(&distance, &angle))
+  //if (ReceiveFromRaspberry(&distance, &angle))
   
   //Send color to track
+  //Send2Raspberry(data, length);
 
   //Read IR sensors
 
   //Wait for the start signal
+  //start_led = readStartLED();
 
   //Follow the bright LED (linear camera)
   //LinearCam();
 
-  //Close the gripper
+  //Open or close the gripper
+  //OpenGripper();
+  //CloseGripper();
 
-  // Open the gripper
-
-  // Set motors
+  //Set motors
+  //SetMotors(motor_left, motor_right);
 
   //Odometry from motor commands integration, ground color
+  //OdometryUpdate(motor_left, motor_right, delta_t);
 
   delay(2000);
 }

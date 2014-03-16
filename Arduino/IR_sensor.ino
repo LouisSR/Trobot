@@ -1,6 +1,6 @@
 //Declaration in IR-sensor.h
 
-void readDistanceIR(int range[NB_IR_DISTANCE_SENSOR])
+void readDistanceIR(unsigned int range[NB_IR_DISTANCE_SENSOR])
 {
   unsigned int value;
    
@@ -12,7 +12,7 @@ void readDistanceIR(int range[NB_IR_DISTANCE_SENSOR])
     selectMultiplexer(i); //Select the sensor to read
     //Wait during capacitor charging ?
     value = analogRead(IR_SENSOR_OUTPUT);     // read the value from the sensors
-    range[i] = multiMap(value, i);            // interpolate to find the distance
+    range[i] = multiMap(value, 0);            // interpolate to find the distance
   } 
   digitalWrite(VDD_IRLED, LOW);//Turn off VDD of IR sensors
   digitalWrite(ENABLE_MUX, LOW);//Disable multiplexer
@@ -82,7 +82,7 @@ void selectMultiplexer(byte channel)
   digitalWrite( S3, (channel & 1000) );
 }
 
-int multiMap(int val, int sensor)
+unsigned int multiMap(unsigned int val, int sensor)
 {
   // take care the value is within range
   // val = constrain(val, _in[0], _in[size-1]);

@@ -1,13 +1,18 @@
-#define wheel_radius 35
-#define wheels_distance 100 //distance between wheel_radius
 #define BLACK 0
 #define WHITE 1
 #define GREY 2
-#define HOME 2
-#define OPPONENT_HOME 3
+#define HOME_WHITE 2
+#define HOME_BLACK 3
+#define GRIPPER_OPEN 180
+#define GRIPPER_CLOSED 0
 
+const unsigned int wheel_radius = 35;
+const unsigned int wheels_distance = 100; //distance between wheel_radius
+const unsigned int field_length = 3000;
+const unsigned int field_width = 2000;
 
 unsigned int position_x=0, position_y=0;
 float position_theta=0;
-int zone=0; //2: starting zone, 1: white zone, -1: black zone, -2: opponent starting zone
+unsigned int zone=0;
 unsigned int color_ground=GREY;
+unsigned int myHome=0;

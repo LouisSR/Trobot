@@ -85,5 +85,3 @@ boolean SerialReceive(byte* buffer, unsigned int length)
 	Serial.flush();
 	return(data_read);
 }
-
- 
