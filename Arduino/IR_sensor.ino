@@ -43,7 +43,7 @@ unsigned int readGroundColor(void)
   {
     color = GREY;
   }
-  
+  return(value);
   return(color);
 } 
 

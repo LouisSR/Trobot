@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /Users/louissaint-raymond2/Desktop/Robopoly
+cd /Users/louissaint-raymond2/Documents/Louis/Trobot/
 
 scp *.py robot pi@pirobot.local:Desktop/robot/
 
@@ -13,4 +13,4 @@ cd Desktop/robot/
 exit
 '
 
-scp -r pi@pirobot.local:Desktop/robot/images .
+scp -r pi@pirobot.local:Desktop/robot/images/ .

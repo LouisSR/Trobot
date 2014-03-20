@@ -26,9 +26,9 @@ void Send2Raspberry(unsigned int* data, unsigned int data_length)
 	Serial.println();
 }
 
-boolean ReceiveFromRaspberry(unsigned int* distance, int* angle)
+boolean ReceiveFromRaspberry(unsigned int* distance, int* angle, unsigned int* color)
 {
-	unsigned int length = 4;
+	unsigned int length = 6;
 	byte buffer[length];
 	boolean good_transmission=false;
 
@@ -36,6 +36,7 @@ boolean ReceiveFromRaspberry(unsigned int* distance, int* angle)
 	{
 		*distance = word(buffer[0],buffer[1]);
 		*angle = word(buffer[2],buffer[3]);
+		*color = word(buffer[4],buffer[5]);
 		good_transmission = true;
 	}
 	
@@ -50,10 +51,9 @@ boolean SerialReceive(byte* buffer, unsigned int length)
 	unsigned int timeout = 100; // Number of while loop before timeout
  
 	//Serial or Serial1 ???????
-
-	while(Serial.available()!= 0 && data_ready==false && timeout) //search for the start byte
+	while(Serial1.available()!= 0 && data_ready==false && timeout) //search for the start byte
 	{
-		if (Serial.read()== start_byte )
+		if (Serial1.read()== start_byte )
 		{
 			data_ready = true;
 		}
@@ -67,21 +67,21 @@ boolean SerialReceive(byte* buffer, unsigned int length)
 	if(data_ready==true)
 	{             
 		delay(10);
-		if (Serial.available()>0)
+		if (Serial1.available()>0)
 		{
-			Serial.read(); //discard length byte
+			Serial1.read(); //discard length byte
 
-			if (Serial.available() >= length)
+			if (Serial1.available() >= length)
 			{
 				for (int i=0; i<length; i++)
 				{
-					buffer[i] = Serial.read();
+					buffer[i] = Serial1.read();
 				}
 				data_read = true;
 			}
 		}
 	}
 
-	Serial.flush();
+	Serial1.flush();
 	return(data_read);
 }

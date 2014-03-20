@@ -1,8 +1,8 @@
 /*
 UART:
- Pins 0-1
+ Rx: Pin 0 ; TX: Pin 1
 Servos:
- Pins 5-6
+ Pins 5,6
 DC motor:
  Pins 9-12
  
@@ -27,7 +27,12 @@ LinearCamera LinCam = LinearCamera(5); // new instance of the camera, it works o
 void setup()
 {
   //Pins initialization: input/output and low/high
-  pinMode(LED, OUTPUT); //LED13 on
+  pinMode(IR_SENSOR_OUTPUT, INPUT);
+  pinMode(VDD_IRLED, OUTPUT);
+  digitalWrite(VDD_IRLED, LOW);
+  pinMode(ENABLE_MUX, OUTPUT);
+  digitalWrite(ENABLE_MUX, LOW);
+  pinMode(LED, OUTPUT); //LED: pin13
   
   gripper.attach(S1); // pin 6
   servo2.attach(S2); // pin 5
@@ -40,17 +45,31 @@ void loop()
 {
   //Variable declaration
   unsigned int length=2;
-  unsigned int data[]={67,56};
-  unsigned int distance;
+  unsigned int data[]={55,56};
+  unsigned int distance, color=55;
   int angle;
   
   //Check UART
-  //if (ReceiveFromRaspberry(&distance, &angle))
+  // if (ReceiveFromRaspberry(&distance, &angle, &color))
+  // {
+  // Serial.print("Receive: ");
+  // Serial.print(distance);
+  // Serial.print("  ");
+  // Serial.print(angle);
+  // Serial.print("  ");
+  // Serial.println(color);
+  // }
+  // else
+  // {
+  //   Serial.println("Nothing");
+  // }
   
   //Send color to track
-  //Send2Raspberry(data, length);
+  Send2Raspberry(data, length);
+
 
   //Read IR sensors
+  //Serial.println(readGroundColor());
 
   //Wait for the start signal
   //start_led = readStartLED();
@@ -68,7 +87,7 @@ void loop()
   //Odometry from motor commands integration, ground color
   //OdometryUpdate(motor_left, motor_right, delta_t);
 
-  delay(2000);
+  delay(1500);
 }
 
 
