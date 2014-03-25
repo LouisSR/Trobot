@@ -3,8 +3,8 @@
 #define GREY 2
 #define HOME_WHITE 2
 #define HOME_BLACK 3
-#define GRIPPER_OPEN 180
-#define GRIPPER_CLOSED 0
+#define GRIPPER_OPEN 125
+#define GRIPPER_CLOSED 40
 
 const unsigned int wheel_radius = 35;
 const unsigned int wheels_distance = 100; //distance between wheel_radius

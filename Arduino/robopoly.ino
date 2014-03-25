@@ -2,7 +2,8 @@
 UART:
  Rx: Pin 0 ; TX: Pin 1
 Servos:
- Pins 5,6
+  Servo1 : pin 6
+  Servo2 : pin 5
 DC motor:
  Pins 9-12
  
@@ -12,8 +13,8 @@ IR distance sensors:
  Pins A4,4,7,A0,A1,A2,A3 (6pins+1 Analog pin)
  */
 
-#include <Servo.h> 
 #include <prismino.h>
+#include <Servo.h> 
 #include <LinearCamera.h>
 #include <math.h>
 #include "IR_sensor.h"
@@ -21,21 +22,22 @@ IR distance sensors:
 
 /* Variable and constant declaration*/
 Servo gripper;
-Servo servo2;
+//Servo servo2; 
 LinearCamera LinCam = LinearCamera(5); // new instance of the camera, it works over i2c and the default address is "5"
+int gripper1 = 0;
 
 void setup()
 {
   //Pins initialization: input/output and low/high
   pinMode(IR_SENSOR_OUTPUT, INPUT);
   pinMode(VDD_IRLED, OUTPUT);
-  digitalWrite(VDD_IRLED, LOW);
+  digitalWrite(VDD_IRLED, HIGH);
   pinMode(ENABLE_MUX, OUTPUT);
   digitalWrite(ENABLE_MUX, LOW);
   pinMode(LED, OUTPUT); //LED: pin13
   
-  gripper.attach(S1); // pin 6
-  servo2.attach(S2); // pin 5
+  gripper.attach(SERVO1); // pin 6
+  //servo2.attach(S2); // pin 5
 
   Serial.begin(115200);   // open the USB serial port at 115200 bps:
   Serial1.begin(115200);  // open the serial port (pin0-1) at 115200 bps:
@@ -48,6 +50,7 @@ void loop()
   unsigned int data[]={55,56};
   unsigned int distance, color=55;
   int angle;
+  
   
   //Check UART
   // if (ReceiveFromRaspberry(&distance, &angle, &color))
@@ -65,7 +68,7 @@ void loop()
   // }
   
   //Send color to track
-  Send2Raspberry(data, length);
+  //Send2Raspberry(data, length);
 
 
   //Read IR sensors
@@ -75,11 +78,21 @@ void loop()
   //start_led = readStartLED();
 
   //Follow the bright LED (linear camera)
-  //LinearCam();
+  LinearCam();
 
   //Open or close the gripper
-  //OpenGripper();
-  //CloseGripper();
+  /*if(gripper1 == 1)
+  {
+    OpenGripper();
+    gripper.write(125);
+    gripper1 = 0;
+  } 
+  else
+  {
+    CloseGripper();
+     gripper.write(40);
+    gripper1 = 1;
+  }*/
 
   //Set motors
   //SetMotors(motor_left, motor_right);
@@ -87,7 +100,7 @@ void loop()
   //Odometry from motor commands integration, ground color
   //OdometryUpdate(motor_left, motor_right, delta_t);
 
-  delay(1500);
+  delay(200);
 }
 
 
