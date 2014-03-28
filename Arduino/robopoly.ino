@@ -20,11 +20,11 @@ IR distance sensors:
 #include "IR_sensor.h"
 #include "robot.h" 
 
-/* Variable and constant declaration*/
-Servo gripper;
-//Servo servo2; 
+/* Object declaration*/
+Servo gripper; 
 LinearCamera LinCam = LinearCamera(5); // new instance of the camera, it works over i2c and the default address is "5"
-int gripper1 = 0;
+
+int gripper1 = 0; //test variable
 
 void setup()
 {
@@ -78,7 +78,7 @@ void loop()
   //start_led = readStartLED();
 
   //Follow the bright LED (linear camera)
-  LinearCam();
+  //LinearCam();
 
   //Open or close the gripper
   /*if(gripper1 == 1)
@@ -100,16 +100,102 @@ void loop()
   //Odometry from motor commands integration, ground color
   //OdometryUpdate(motor_left, motor_right, delta_t);
 
+
+/*
+switch(robot_state)
+{
+  case STATE_WAIT_START: if( WaitForStart() )
+    robot_state = STATE_SEARCH_CUBE;
+    break;
+  case STATE_SEARCH_CUBE: if( SearchForCube() )
+    robot_state = STATE_GO2CUBE;
+    break;
+  case STATE_GO2CUBE: if( Go2Cube() )
+    robot_state = STATE_TAKE_CUBE;
+    break;
+  case STATE_TAKE_CUBE: if( TakeCube() )
+    robot_state = STATE_GO_HOME;
+    break;
+  case STATE_GO_HOME: if( GoHome() )
+    robot_state = STATE_DROP_CUBE;
+    break;
+  case STATE_DROP_CUBE: if( DropCube() )
+    robot_state = STATE_SEARCH_CUBE;
+    break;
+  default: break;
+}
+*/
   delay(200);
 }
 
-
-void sendPlotData(String seriesName, int data)
+boolean WaitForStart(void)
 {
-  Serial.print("{");
-  Serial.print(seriesName);
-  Serial.print(",T,");
-  Serial.print(data);
-  Serial.println("}");
+  boolean led_off = false;
+  
+  //Send2Raspberry(unsigned int* data, unsigned int data_length);
+  
+  led_off = readStartLED();
+  
+  return led_off;
 }
+
+boolean SearchForCube(void)
+{
+  boolean cube_detected = false;
+  //Send2Raspberry(unsigned int* data, unsigned int data_length);
+  //ReceiveFromRaspberry(unsigned int* distance, int* angle, unsigned int* color);
+  
+  return cube_detected;
+}
+
+boolean Go2Cube(void)
+{
+  boolean cube_here = false;
+  
+  return cube_here;
+}
+
+boolean TakeCube(void)
+{
+  boolean cube_collected = false;
+  
+  cube_collected = CloseGripper();
+  
+  return cube_collected;
+}
+
+boolean GoHome(void)
+{
+  boolean got_home = false;
+  //DriveTo(0,0);
+  return got_home;
+}
+
+boolean DropCube(void)
+{
+  boolean cube_dropped = false;
+  
+  OpenGripper();
+  //step back then rotate
+  if( abs(position_theta) > RADIANS(5) ) 
+  {
+    move(0,position_theta); //rotate
+  }
+  else
+  {
+    // Reset odometry
+    cube_dropped = true;
+  }
+  
+  return cube_dropped;
+}
+
+// void sendPlotData(String seriesName, int data)
+// {
+//   Serial.print("{");
+//   Serial.print(seriesName);
+//   Serial.print(",T,");
+//   Serial.print(data);
+//   Serial.println("}");
+// }
 
