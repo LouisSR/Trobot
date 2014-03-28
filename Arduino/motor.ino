@@ -29,13 +29,13 @@ boolean DriveTo(unsigned int destination_x, unsigned int destination_y)
 	diff = Normalize(alpha - position_theta);
 	if  ( diff > RADIANS(10) ) // rotate
 	{
-		move(0, diff); //rotate ; diff used for speed control
+		Move(0, diff); //rotate ; diff used for speed control
 	}
 	else //move
 	{
 		if(distance > 5)
 		{
-			move(distance, diff); //distance and diff used for speed control
+			Move(distance, diff); //distance and diff used for speed control
 		}
 		else
 		{
@@ -47,8 +47,10 @@ boolean DriveTo(unsigned int destination_x, unsigned int destination_y)
 
 void Move(unsigned int distance, int diff)
 {	
-	motor_left = distance - DEGREES(diff);
-	motor_right = distance + DEGREES(diff);
+	int motor_left, motor_right;
+
+	motor_left = distance - diff*5;
+	motor_right = distance + diff*5;
 	setSpeed(motor_left, motor_right); // values between -100 and 100
 }
 
@@ -59,5 +61,5 @@ void SetMotors(int motor_left, int motor_right)
 	left_speed = motor_left;
 	right_speed = motor_right;
 	setSpeed(left_speed, right_speed);
-	delay(50); // wait at least 100ms or the setting won't have any effect before the next setting
+	delay(100); // wait at least 100ms or the setting won't have any effect before the next setting
 }

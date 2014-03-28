@@ -24,7 +24,10 @@ IR distance sensors:
 Servo gripper; 
 LinearCamera LinCam = LinearCamera(5); // new instance of the camera, it works over i2c and the default address is "5"
 
-int gripper1 = 0; //test variable
+/* Test variables*/
+int gripper1 = 0;
+int motor_right=30, motor_left=30;
+//unsigned char = timer_odometry, timer_UART, timer_obstacles; 
 
 void setup()
 {
@@ -39,12 +42,19 @@ void setup()
   gripper.attach(SERVO1); // pin 6
   //servo2.attach(S2); // pin 5
 
+  //timer_odometry = setTimer(OdometryUpdate, 2 );
+  //unsetTimer(timer_odometry);
+  //timer_UART = setTimer(); //check UART
+  //timer_obstacles = setTimer();
+
   Serial.begin(115200);   // open the USB serial port at 115200 bps:
   Serial1.begin(115200);  // open the serial port (pin0-1) at 115200 bps:
 }
 
 void loop()
 {
+  unsigned long mytic = millis();
+  unsigned long mytoc;
   //Variable declaration
   unsigned int length=2;
   unsigned int data[]={55,56};
@@ -95,10 +105,12 @@ void loop()
   }*/
 
   //Set motors
-  //SetMotors(motor_left, motor_right);
+  //motor_left += 10;
+  //motor_right += 10;
+  SetMotors(motor_left, motor_right);
 
   //Odometry from motor commands integration, ground color
-  //OdometryUpdate(motor_left, motor_right, delta_t);
+  OdometryUpdate(motor_left, motor_right, 500);
 
 
 /*
@@ -125,7 +137,10 @@ switch(robot_state)
   default: break;
 }
 */
-  delay(200);
+  mytoc = millis();
+  Serial.print("Loop time: ");
+  Serial.println(mytoc-mytic);
+  delay( 500-(mytoc-mytic) );
 }
 
 boolean WaitForStart(void)
@@ -179,7 +194,7 @@ boolean DropCube(void)
   //step back then rotate
   if( abs(position_theta) > RADIANS(5) ) 
   {
-    move(0,position_theta); //rotate
+    Move(0,position_theta); //rotate
   }
   else
   {

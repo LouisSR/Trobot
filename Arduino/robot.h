@@ -15,8 +15,8 @@
 #define STATE_DROP_CUBE		5
 
 /* Macros */
-#define RADIANS(a)			(a)/180.0*M_PI
-#define DEGREES(a)			(a)/M_PI*180
+#define RADIANS(a)			( (a)/180.0*M_PI )
+#define DEGREES(a)			( (a)/M_PI*180 )
 
 /* Constant */
 const unsigned int wheel_radius = 35;
