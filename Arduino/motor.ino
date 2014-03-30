@@ -67,7 +67,7 @@ void SetMotors(int motor_left, int motor_right)
 	delay(100); // wait at least 100ms or the setting won't have any effect before the next setting
 }
 
-void FollowCam(void)
+void FollowLight(void)
 {
 	int CamPeak;
 

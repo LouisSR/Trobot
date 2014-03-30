@@ -26,7 +26,8 @@ LinearCamera LinCam = LinearCamera(5); // new instance of the camera, it works o
 
 /* Test variables*/
 int gripper1 = 0;
-int motor_right=100, motor_left=100;
+int motor_right=10, motor_left=10;
+unsigned int timer_odometry;
 //unsigned char = timer_odometry, timer_UART, timer_obstacles; 
 
 void setup()
@@ -39,16 +40,18 @@ void setup()
   digitalWrite(ENABLE_MUX, LOW);
   pinMode(LED, OUTPUT); //LED: pin13
   
-  gripper.attach(SERVO1); // pin 6
+  gripper.attach(SERVO1); // pin 6 --- share timer with setTimer
   //servo2.attach(S2); // pin 5
 
-  //timer_odometry = setTimer(OdometryUpdate, 2 );
+  //timer_odometry = setTimer(OdometryUpdate, 2 ); //share timer with Servo
   //unsetTimer(timer_odometry);
   //timer_UART = setTimer(); //check UART
   //timer_obstacles = setTimer();
 
   Serial.begin(115200);   // open the USB serial port at 115200 bps:
   Serial1.begin(115200);  // open the serial port (pin0-1) at 115200 bps:
+
+  delay(3000);
 }
 
 void loop()
@@ -82,8 +85,8 @@ void loop()
 
 
   //Read IR sensors
-  Serial.print("GroundColor: ");
-  Serial.println(readGroundColor());
+  //Serial.print("GroundColor: ");
+  //Serial.println(readGroundColor());
 
   //Wait for the start signal
   //Serial.print("StartLED: ");
@@ -97,7 +100,7 @@ void loop()
   //Serial.print("LinCam: ");
   //Serial.println(LinearCam());
   //LinearCam();
-  //FollowCam();
+  //FollowLight();
   
   //Open or close the gripper
   /*if(gripper1 == 1)
@@ -112,12 +115,21 @@ void loop()
      gripper.write(40);
     gripper1 = 1;
   }*/
+    //delay(4000);
+    //Move(100,0);
+    //delay(1000);
+    //Move(0,0);
 
-  //Set motors
-  //motor_left += 10;
-  //motor_right += 10;
-  //SetMotors(motor_left, motor_right);
+  //OdometryUpdate();
 
+    // Serial.print("Odometry: ");
+    // Serial.print(position_x);
+    // Serial.print("  ");
+    // Serial.print(position_y);
+    // Serial.print("  ");
+    // Serial.print(position_theta);
+    // Serial.print("  ");
+    // Serial.println(zone);
   //Odometry from motor commands integration, ground color
   //OdometryUpdate(motor_left, motor_right, 500);
 
@@ -135,6 +147,9 @@ switch(robot_state)
     robot_state = STATE_TAKE_CUBE;
     break;
   case STATE_TAKE_CUBE: if( TakeCube() )
+    robot_state = STATE_FACE_HOME;
+    break;
+  case STATE_FACE_HOME: if( FaceHome() )
     robot_state = STATE_GO_HOME;
     break;
   case STATE_GO_HOME: if( GoHome() )
@@ -149,7 +164,7 @@ switch(robot_state)
   mytoc = millis();
   // Serial.print("Loop time: ");
   // Serial.println(mytoc-mytic);
-  delay( 200-(mytoc-mytic) );
+  delay( loop_time-(mytoc-mytic) );
 }
 
 boolean WaitForStart(void)
@@ -188,10 +203,35 @@ boolean TakeCube(void)
   return cube_collected;
 }
 
+boolean FaceHome(void)
+{
+  boolean face_home = false;
+  float diff = RADIANS(180)-position_theta;
+  if (abs(diff) > 15 )
+  {
+    Move(0,diff*10);
+  }
+  else
+  {
+    face_home = true;
+  }
+
+  return face_home;
+}
+
 boolean GoHome(void)
 {
   boolean got_home = false;
   //DriveTo(0,0);
+  if(color_ground != GREY)
+  {
+    FollowLight();
+  }
+  else
+  {
+    got_home = true;
+  }
+  
   return got_home;
 }
 
@@ -223,3 +263,8 @@ boolean DropCube(void)
 //   Serial.println("}");
 // }
 
+void myPrint(float data)
+{
+  Serial.print(data);
+  Serial.print(" \t");
+}

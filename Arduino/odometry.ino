@@ -1,16 +1,26 @@
-void OdometryUpdate(int motor_right, int motor_left, unsigned int delta_t)
+void OdometryUpdate()
 {
 	unsigned long mytic = millis();
 	unsigned long mytoc;
 	unsigned int new_ground_color;
+	int speed_left = ToMetric(robot_speed_left);
+	int speed_right = ToMetric(robot_speed_right);
 
-	position_theta += wheel_radius * (motor_left - motor_right) * delta_t / (2 * wheels_distance);
+	position_theta += wheel_radius * (speed_left - speed_right) * delta_t / (2 * wheels_distance);
 	position_theta = Normalize(position_theta);
-	position_x += wheel_radius * (motor_left + motor_right) * delta_t * cos(position_theta) /2.0 ;
-	position_y += wheel_radius * (motor_left + motor_right) * delta_t * sin(position_theta) /2.0 ;
+	position_x += wheel_radius * (speed_left + speed_right) * delta_t * cos(position_theta) /2.0 ;
+	position_y += wheel_radius * (speed_left + speed_right) * delta_t * sin(position_theta) /2.0 ;
 
 	position_x = constrain(position_x, 0, field_length);
 	position_y = constrain(position_y, -field_width/2, field_width/2);
+	
+	myPrint(robot_speed_right);
+	myPrint(robot_speed_left);
+	myPrint(speed_right);
+	myPrint(speed_left);
+	myPrint(position_x);
+	myPrint(position_y);
+	myPrint(DEGREES(position_theta));
 
 	new_ground_color = readGroundColor();
 
@@ -46,7 +56,7 @@ void OdometryUpdate(int motor_right, int motor_left, unsigned int delta_t)
 		color_ground = new_ground_color;
 	}
 	mytoc = millis();
-	Serial.print("Odometry Time: ");
+	Serial.print("                           Odometry Time: ");
 	Serial.println(mytoc-mytic);
 }
 
@@ -60,9 +70,9 @@ float Normalize(float angle)
 	return(angle);
 }
 
-int ToMetric(int speed)
+float ToMetric(float speed)
 {
-	int metric_speed;
-	metric_speed =  speed; 
+	float metric_speed;
+	metric_speed =  speed * robot_max_speed / 100.0; 
 	return metric_speed;
 }
