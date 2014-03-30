@@ -9,7 +9,7 @@
 
 #define GROUND_COLOR_SENSOR 15 //Mux Channel of ground color sensor
 #define START_LED 14 // Mux channel of start led
-#define NB_IR_DISTANCE_SENSOR 5 //Number of IR sensor for distance measuring
+#define NB_IR_DISTANCE_SENSOR 3 //Number of IR sensor for distance measuring
 #define BLACK_GROUND 300 //threshold
 #define WHITE_GROUND 850 //threshold
 #define START_LED_ON 900 //threshold

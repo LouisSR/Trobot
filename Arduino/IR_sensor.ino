@@ -3,11 +3,12 @@
 void readDistanceIR(unsigned int range[NB_IR_DISTANCE_SENSOR])
 {
   unsigned int value;
+  unsigned int i;
    
-   digitalWrite(ENABLE_MUX, HIGH);//Enable Multiplexers
+   digitalWrite(ENABLE_MUX, LOW);//Enable Multiplexers
    digitalWrite(VDD_IRLED, HIGH);//Turn on VDD of IR sensors
 
-  for(int i=0; i<NB_IR_DISTANCE_SENSOR; i++)
+  for( i=0; i<NB_IR_DISTANCE_SENSOR; i++)
   {
     selectMultiplexer(i); //Select the sensor to read
     //Wait during capacitor charging ?
@@ -15,7 +16,7 @@ void readDistanceIR(unsigned int range[NB_IR_DISTANCE_SENSOR])
     range[i] = multiMap(value, 0);            // interpolate to find the distance
   } 
   digitalWrite(VDD_IRLED, LOW);//Turn off VDD of IR sensors
-  digitalWrite(ENABLE_MUX, LOW);//Disable multiplexer
+  digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
 }
 
 unsigned int readGroundColor(void)

@@ -26,7 +26,7 @@ const unsigned int robot_max_speed = 380; //370 mm/s
 const int field_length = 3000;
 const int field_width = 2000;
 const float delta_t = 0.2; //odometry time
-const unsigned int loop_time = 1000;
+const unsigned int loop_time = 100;
 
 
 /* Global Variables */

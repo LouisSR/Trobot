@@ -37,8 +37,9 @@ void setup()
   pinMode(VDD_IRLED, OUTPUT);
   digitalWrite(VDD_IRLED, HIGH);
   pinMode(ENABLE_MUX, OUTPUT);
-  digitalWrite(ENABLE_MUX, LOW);
+  digitalWrite(ENABLE_MUX, HIGH);
   pinMode(LED, OUTPUT); //LED: pin13
+  digitalWrite(A5,LOW);
   
   gripper.attach(SERVO1); // pin 6 --- share timer with setTimer
   //servo2.attach(S2); // pin 5
@@ -60,7 +61,7 @@ void loop()
   unsigned long mytoc;
   //Variable declaration
   unsigned int length=2;
-  unsigned int data[]={55,56};
+  unsigned int data[NB_IR_DISTANCE_SENSOR];
   unsigned int distance, color=55;
   int angle;
   
@@ -87,6 +88,7 @@ void loop()
   //Read IR sensors
   //Serial.print("GroundColor: ");
   //Serial.println(readGroundColor());
+  readDistanceIR(data);
 
   //Wait for the start signal
   //Serial.print("StartLED: ");
