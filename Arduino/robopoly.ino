@@ -26,7 +26,7 @@ LinearCamera LinCam = LinearCamera(5); // new instance of the camera, it works o
 
 /* Test variables*/
 int gripper1 = 0;
-int motor_right=30, motor_left=30;
+int motor_right=100, motor_left=100;
 //unsigned char = timer_odometry, timer_UART, timer_obstacles; 
 
 void setup()
@@ -82,14 +82,23 @@ void loop()
 
 
   //Read IR sensors
-  //Serial.println(readGroundColor());
+  Serial.print("GroundColor: ");
+  Serial.println(readGroundColor());
 
   //Wait for the start signal
-  //start_led = readStartLED();
+  //Serial.print("StartLED: ");
+  //Serial.println(readStartLED());
+  //if ( WaitForStart() == 0 )
+  //{
+  //  Move(20,0);
+  //}
 
   //Follow the bright LED (linear camera)
+  //Serial.print("LinCam: ");
+  //Serial.println(LinearCam());
   //LinearCam();
-
+  //FollowCam();
+  
   //Open or close the gripper
   /*if(gripper1 == 1)
   {
@@ -107,10 +116,10 @@ void loop()
   //Set motors
   //motor_left += 10;
   //motor_right += 10;
-  SetMotors(motor_left, motor_right);
+  //SetMotors(motor_left, motor_right);
 
   //Odometry from motor commands integration, ground color
-  OdometryUpdate(motor_left, motor_right, 500);
+  //OdometryUpdate(motor_left, motor_right, 500);
 
 
 /*
@@ -138,9 +147,9 @@ switch(robot_state)
 }
 */
   mytoc = millis();
-  Serial.print("Loop time: ");
-  Serial.println(mytoc-mytic);
-  delay( 500-(mytoc-mytic) );
+  // Serial.print("Loop time: ");
+  // Serial.println(mytoc-mytic);
+  delay( 200-(mytoc-mytic) );
 }
 
 boolean WaitForStart(void)

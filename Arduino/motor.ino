@@ -49,8 +49,11 @@ void Move(unsigned int distance, int diff)
 {	
 	int motor_left, motor_right;
 
-	motor_left = distance - diff*5;
-	motor_right = distance + diff*5;
+	motor_left = distance - diff;
+	motor_right = distance + diff;
+	// Serial.print(motor_left);
+	// Serial.print("    ");
+	// Serial.println(motor_right);
 	setSpeed(motor_left, motor_right); // values between -100 and 100
 }
 
@@ -62,4 +65,34 @@ void SetMotors(int motor_left, int motor_right)
 	right_speed = motor_right;
 	setSpeed(left_speed, right_speed);
 	delay(100); // wait at least 100ms or the setting won't have any effect before the next setting
+}
+
+void FollowCam(void)
+{
+	int CamPeak;
+
+	CamPeak = LinearCam();
+	if(CamPeak != -100)
+	{
+		//Move(25,CamPeak/4);
+		//Serial.println(CamPeak);
+
+		if(abs(CamPeak) < 20)
+		{
+			Move(40,CamPeak/4);
+			Serial.println("Tout droit");
+
+		}
+		else
+		{
+			Move(0, copysign(8,CamPeak) );
+			Serial.println("Peak trop loin");
+
+		}
+	}
+	else
+	{
+		Move(0, 4);
+		Serial.println("No Peak");
+	}
 }

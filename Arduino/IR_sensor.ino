@@ -58,6 +58,7 @@ unsigned int readStartLED(void)
   //Wait during capacitor charging ?
   value = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
   digitalWrite(ENABLE_MUX, LOW);//Disable multiplexer
+  Serial.println(value);
   if(value < START_LED_OFF)
   {
     status = 0; //OFF
