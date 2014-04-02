@@ -12,11 +12,13 @@ void readDistanceIR(unsigned int range[NB_IR_DISTANCE_SENSOR])
   {
     selectMultiplexer(IR_sensor[i]); //Select the sensor to read
     //Wait during capacitor charging ?
+    delay(1);
     value = analogRead(IR_SENSOR_OUTPUT);     // read the value from the sensors
+    myPrint(value);
     range[i] = multiMap(value, 0);            // interpolate to find the distance
   } 
-  digitalWrite(VDD_IRLED, LOW);//Turn off VDD of IR sensors
-  digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
+ //digitalWrite(VDD_IRLED, LOW);//Turn off VDD of IR sensors
+ // digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
 }
 
 unsigned int readGroundColor(void)
@@ -28,6 +30,7 @@ unsigned int readGroundColor(void)
   digitalWrite(VDD_IRLED, HIGH);//Turn on VDD of IR sensors
   selectMultiplexer(GROUND_COLOR_SENSOR); //Select the sensor to read
   //Wait during capacitor charging ?
+  delay(1);
   value = analogRead(IR_SENSOR_OUTPUT);     // read the value from the sensors
   digitalWrite(VDD_IRLED, LOW);//Turn off VDD of IR sensors
   digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
@@ -57,6 +60,7 @@ unsigned int readStartLED(void)
   digitalWrite(VDD_IRLED, LOW);//Optional: should already be off. Turn off VDD of IR sensors
   selectMultiplexer(START_LED); //Select the sensor to read
   //Wait during capacitor charging ?
+  delay(1);
   value = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
   digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
   Serial.println(value);
@@ -84,6 +88,7 @@ boolean CubeDetect(void)
   digitalWrite(VDD_IRLED, LOW);//Optional: should already be off. Turn off VDD of IR sensors
   selectMultiplexer(CUBE_DETECTION_LOW); //Select the sensor to read
   //Wait during capacitor charging ?
+  delay(1);
   value = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
   digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
   myPrint(value);
@@ -105,10 +110,12 @@ boolean CubeDetect(void)
 void selectMultiplexer(byte channel)
 /*Select channel: 0-15*/
 {
-  digitalWrite( S0, (channel & 0001) );
-  digitalWrite( S1, (channel & 0010) );
-  digitalWrite( S2, (channel & 0100) );
-  digitalWrite( S3, (channel & 1000) );
+
+  digitalWrite( MUX_S0, (channel & B0001) );
+  digitalWrite( MUX_S1, (channel & B00010) );
+  digitalWrite( MUX_S2, (channel & B00100) );
+  digitalWrite( MUX_S3, (channel & B01000) );
+
 }
 
 unsigned int multiMap(unsigned int val, int sensor)

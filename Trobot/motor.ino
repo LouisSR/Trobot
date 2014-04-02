@@ -5,7 +5,7 @@ void OpenGripper(void)
 	gripper.write(GRIPPER_OPEN);
 	Serial.println(GRIPPER_OPEN);
     delay(50); // add a small delay so the servo motors have time to move
-    gripper.detach(SERVO1); // pin 6 --- share timer with setTimer
+    gripper.detach(); // pin 6 --- share timer with setTimer
 	timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
 }
 
@@ -15,7 +15,7 @@ void CloseGripper(void)
 	gripper.attach(SERVO1); // pin 6 --- share timer with setTimer
 	gripper.write(GRIPPER_CLOSED);
     delay(50); // add a small delay so the servo motors have time to move
-    gripper.detach(SERVO1);
+    gripper.detach();
     timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
 }
 

@@ -14,13 +14,13 @@ void OdometryUpdate()
 	position_x = constrain(position_x, 0, field_length);
 	position_y = constrain(position_y, -field_width/2, field_width/2);
 	
-	myPrint(robot_speed_right);
-	myPrint(robot_speed_left);
-	myPrint(speed_right);
-	myPrint(speed_left);
-	myPrint(position_x);
-	myPrint(position_y);
-	myPrint(DEGREES(position_theta));
+	// myPrint(robot_speed_right);
+	// myPrint(robot_speed_left);
+	// myPrint(speed_right);
+	// myPrint(speed_left);
+	// myPrint(position_x);
+	// myPrint(position_y);
+	// myPrint(DEGREES(position_theta));
 
 	new_ground_color = readGroundColor();
 
@@ -56,8 +56,8 @@ void OdometryUpdate()
 		color_ground = new_ground_color;
 	}
 	mytoc = millis();
-	Serial.print("                           Odometry Time: ");
-	Serial.println(mytoc-mytic);
+	//Serial.print("                           Odometry Time: ");
+	//Serial.println(mytoc-mytic);
 }
 
 float Normalize(float angle)

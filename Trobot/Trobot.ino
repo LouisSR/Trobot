@@ -32,22 +32,22 @@ int motor_right=10, motor_left=10;
 void setup()
 {
   //Pins initialization: input/output and low/high
-  pinMode(IR_SENSOR_OUTPUT, INPUT);
   pinMode(VDD_IRLED, OUTPUT);
   digitalWrite(VDD_IRLED, HIGH);
   pinMode(ENABLE_MUX, OUTPUT);
   digitalWrite(ENABLE_MUX, HIGH);
   pinMode(LED, OUTPUT); //LED: pin13
-  digitalWrite(A5,LOW);
 
-  timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
+ // timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
   //timer_UART = setTimer(); //check UART
   //timer_obstacles = setTimer();
 
   Serial.begin(115200);   // open the USB serial port at 115200 bps:
   Serial1.begin(115200);  // open the serial port (pin0-1) at 115200 bps:
 
-  delay(2000);
+
+
+  delay(5200);
 }
 
 void loop()
@@ -79,12 +79,13 @@ void loop()
   //Send color to track
   //Send2Raspberry(data, length);
 
-
   //Read IR sensors
-  //Serial.print("GroundColor: ");
-  //Serial.println(readGroundColor());
-  readDistanceIR(data);
+  Serial.print("GroundColor: ");
+  Serial.println(readGroundColor());
 
+  // Serial.print("IR: ");
+  // readDistanceIR(data);
+  // Serial.println();
   //Wait for the start signal
   //Serial.print("StartLED: ");
   //Serial.println(readStartLED());
@@ -195,7 +196,7 @@ boolean TakeCube(void)
 {
   boolean cube_collected = false;
 
-  if ( CubeDetection() )
+  if ( CubeDetect() )
   {
     CloseGripper();
   }
@@ -239,8 +240,15 @@ boolean DropCube(void)
 {
   boolean cube_dropped = false;
   
+  Move(50,0);//enter the Grey Zone
+  delay(200);
+
   OpenGripper();
-  //step back then rotate
+  
+  //step back
+  Move(-50,0);
+  delay(200);
+
   if( abs(position_theta) > RADIANS(5) ) 
   {
     Move(0,position_theta); //rotate

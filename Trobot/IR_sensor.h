@@ -2,10 +2,10 @@
 #define VDD_IRLED 4         // Digital output
 #define IR_SENSOR_OUTPUT A4 //Analog input
 #define ENABLE_MUX 7        //Digital output
-#define S0 A0   // Digital output
-#define S1 A1   // Digital output
-#define S2 A2   // Digital output
-#define S3 A3   // Digital output
+#define MUX_S0 A0   // Digital output
+#define MUX_S1 A1   // Digital output
+#define MUX_S2 A2   // Digital output
+#define MUX_S3 A3   // Digital output
 
 #define GROUND_COLOR_SENSOR 12 //Mux Channel of ground color sensor
 #define START_LED 10 // Mux channel of start led
@@ -20,7 +20,7 @@
 #define NO_CUBE 200 //threshold
 #define CUBE_DETECTED 800 //threshold
 
-const IR_sensor[NB_IR_DISTANCE_SENSOR]={15,13,14};
+const unsigned int IR_sensor[NB_IR_DISTANCE_SENSOR]={15,13,14};
 const int tab_size = 19;
 const int tab[19][2] =
  //Distance in mm, ADC value

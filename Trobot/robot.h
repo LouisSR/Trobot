@@ -32,8 +32,8 @@ const unsigned int odometry_timer_interval = 2;
 
 /* Global Variables */
 unsigned int robot_state = STATE_WAIT_START;
-int robot_speed_left = 10, robot_speed_right = -10; //motor speed
-float position_x=0;
+int robot_speed_left = 0, robot_speed_right = 0; //motor speed
+float position_x=100;
 float position_y=0;
 float position_theta=0;
 unsigned int zone=0;
