@@ -27,7 +27,6 @@ LinearCamera LinCam = LinearCamera(5); // new instance of the camera, it works o
 /* Test variables*/
 int gripper1 = 0;
 int motor_right=10, motor_left=10;
-unsigned int timer_odometry;
 //unsigned char = timer_odometry, timer_UART, timer_obstacles; 
 
 void setup()
@@ -40,19 +39,15 @@ void setup()
   digitalWrite(ENABLE_MUX, HIGH);
   pinMode(LED, OUTPUT); //LED: pin13
   digitalWrite(A5,LOW);
-  
-  gripper.attach(SERVO1); // pin 6 --- share timer with setTimer
-  //servo2.attach(S2); // pin 5
 
-  //timer_odometry = setTimer(OdometryUpdate, 2 ); //share timer with Servo
-  //unsetTimer(timer_odometry);
+  timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
   //timer_UART = setTimer(); //check UART
   //timer_obstacles = setTimer();
 
   Serial.begin(115200);   // open the USB serial port at 115200 bps:
   Serial1.begin(115200);  // open the serial port (pin0-1) at 115200 bps:
 
-  delay(3000);
+  delay(2000);
 }
 
 void loop()
@@ -199,8 +194,11 @@ boolean Go2Cube(void)
 boolean TakeCube(void)
 {
   boolean cube_collected = false;
-  
-  cube_collected = CloseGripper();
+
+  if ( CubeDetection() )
+  {
+    CloseGripper();
+  }
   
   return cube_collected;
 }
@@ -211,7 +209,7 @@ boolean FaceHome(void)
   float diff = RADIANS(180)-position_theta;
   if (abs(diff) > 15 )
   {
-    Move(0,diff*10);
+    Move(0,diff*5);
   }
   else
   {

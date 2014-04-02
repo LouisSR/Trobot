@@ -10,7 +10,7 @@ void readDistanceIR(unsigned int range[NB_IR_DISTANCE_SENSOR])
 
   for( i=0; i<NB_IR_DISTANCE_SENSOR; i++)
   {
-    selectMultiplexer(i); //Select the sensor to read
+    selectMultiplexer(IR_sensor[i]); //Select the sensor to read
     //Wait during capacitor charging ?
     value = analogRead(IR_SENSOR_OUTPUT);     // read the value from the sensors
     range[i] = multiMap(value, 0);            // interpolate to find the distance
@@ -24,13 +24,13 @@ unsigned int readGroundColor(void)
   unsigned int color;
   unsigned int value;
 
-  digitalWrite(ENABLE_MUX, HIGH);//Enable Multiplexers
+  digitalWrite(ENABLE_MUX, LOW);//Enable Multiplexers
   digitalWrite(VDD_IRLED, HIGH);//Turn on VDD of IR sensors
   selectMultiplexer(GROUND_COLOR_SENSOR); //Select the sensor to read
   //Wait during capacitor charging ?
   value = analogRead(IR_SENSOR_OUTPUT);     // read the value from the sensors
   digitalWrite(VDD_IRLED, LOW);//Turn off VDD of IR sensors
-  digitalWrite(ENABLE_MUX, LOW);//Disable multiplexer
+  digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
   
   if(value < BLACK_GROUND)
   {
@@ -53,12 +53,12 @@ unsigned int readStartLED(void)
   unsigned int status;
   unsigned int value;
 
-  digitalWrite(ENABLE_MUX, HIGH);//Enable Multiplexers
+  digitalWrite(ENABLE_MUX, LOW);//Enable Multiplexers
   digitalWrite(VDD_IRLED, LOW);//Optional: should already be off. Turn off VDD of IR sensors
   selectMultiplexer(START_LED); //Select the sensor to read
   //Wait during capacitor charging ?
   value = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
-  digitalWrite(ENABLE_MUX, LOW);//Disable multiplexer
+  digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
   Serial.println(value);
   if(value < START_LED_OFF)
   {
@@ -74,6 +74,33 @@ unsigned int readStartLED(void)
   }
   return(status);
 } 
+
+boolean CubeDetect(void)
+{
+  unsigned int status;
+  unsigned int value;
+
+  digitalWrite(ENABLE_MUX, LOW);//Enable Multiplexers
+  digitalWrite(VDD_IRLED, LOW);//Optional: should already be off. Turn off VDD of IR sensors
+  selectMultiplexer(CUBE_DETECTION_LOW); //Select the sensor to read
+  //Wait during capacitor charging ?
+  value = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
+  digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
+  myPrint(value);
+  if(value < NO_CUBE)
+  {
+    status = 0; //Nothing
+  }
+  else if (value>CUBE_DETECTED)
+  {
+    status = 1; //Cube in gripper
+  }
+  else
+  {
+    status = 2; //Not sure
+  }
+  return(status);
+}
 
 void selectMultiplexer(byte channel)
 /*Select channel: 0-15*/

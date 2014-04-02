@@ -7,15 +7,20 @@
 #define S2 A2   // Digital output
 #define S3 A3   // Digital output
 
-#define GROUND_COLOR_SENSOR 15 //Mux Channel of ground color sensor
-#define START_LED 14 // Mux channel of start led
+#define GROUND_COLOR_SENSOR 12 //Mux Channel of ground color sensor
+#define START_LED 10 // Mux channel of start led
 #define NB_IR_DISTANCE_SENSOR 3 //Number of IR sensor for distance measuring
+#define CUBE_DETECTION_LOW 11
+#define CUBE_DETECTION_HIGH 13
+
 #define BLACK_GROUND 300 //threshold
 #define WHITE_GROUND 850 //threshold
 #define START_LED_ON 900 //threshold
 #define START_LED_OFF 100 //threshold
+#define NO_CUBE 200 //threshold
+#define CUBE_DETECTED 800 //threshold
 
-
+const IR_sensor[NB_IR_DISTANCE_SENSOR]={15,13,14};
 const int tab_size = 19;
 const int tab[19][2] =
  //Distance in mm, ADC value

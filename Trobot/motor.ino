@@ -1,16 +1,22 @@
 void OpenGripper(void)
 {
+	unsetTimer(timer_odometry);
+	gripper.attach(SERVO1); // pin 6 --- share timer with setTimer
 	gripper.write(GRIPPER_OPEN);
 	Serial.println(GRIPPER_OPEN);
     delay(50); // add a small delay so the servo motors have time to move
+    gripper.detach(SERVO1); // pin 6 --- share timer with setTimer
+	timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
 }
 
-boolean CloseGripper(void)
+void CloseGripper(void)
 {
+	unsetTimer(timer_odometry);
+	gripper.attach(SERVO1); // pin 6 --- share timer with setTimer
 	gripper.write(GRIPPER_CLOSED);
     delay(50); // add a small delay so the servo motors have time to move
-    // test if something is gripped and return true if yes.
-    return(true);
+    gripper.detach(SERVO1);
+    timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
 }
 
 boolean DriveTo(unsigned int destination_x, unsigned int destination_y)

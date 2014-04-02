@@ -27,6 +27,7 @@ const int field_length = 3000;
 const int field_width = 2000;
 const float delta_t = 0.2; //odometry time
 const unsigned int loop_time = 100;
+const unsigned int odometry_timer_interval = 2;
 
 
 /* Global Variables */
@@ -38,3 +39,4 @@ float position_theta=0;
 unsigned int zone=0;
 unsigned int color_ground=GREY;
 unsigned int myHome=0;
+unsigned int timer_odometry; //timer Variables
