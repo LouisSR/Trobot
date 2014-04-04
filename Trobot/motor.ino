@@ -1,25 +1,25 @@
 void OpenGripper(void)
 {
 	//unsetTimer(timer_odometry);
-  //gripper.attach(SERVO1); // pin 6 --- share timer with setTimer
-  //delay(50);
-  gripper.write(GRIPPER_OPEN);
-  Serial.println(GRIPPER_OPEN);
-  //delay(50); // add a small delay so the servo motors have time to move
-  //gripper.detach(); // pin 6 --- share timer with setTimer
-  //timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
+    //gripper.attach(SERVO1); // pin 6 --- share timer with setTimer
+    //delay(50);
+    gripper.write(GRIPPER_OPEN);
+    Serial.println(GRIPPER_OPEN);
+    //delay(50); // add a small delay so the servo motors have time to move
+    //gripper.detach(); // pin 6 --- share timer with setTimer
+    //timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
 }
 
 void CloseGripper(void)
 {
-  //unsetTimer(timer_odometry);
-  //gripper.attach(SERVO1); // pin 6 --- share timer with setTimer
-  //delay(50); 
-  gripper.write(GRIPPER_CLOSED);
-  Serial.println(GRIPPER_CLOSED);
-  //delay(50); // add a small delay so the servo motors have time to move
-  //gripper.detach();
-  //timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
+    //unsetTimer(timer_odometry);
+    //gripper.attach(SERVO1); // pin 6 --- share timer with setTimer
+    //delay(50);
+    gripper.write(GRIPPER_CLOSED);
+    Serial.println(GRIPPER_CLOSED);
+    //delay(50); // add a small delay so the servo motors have time to move
+    //gripper.detach();
+    //timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
 }
 
 boolean DriveTo(unsigned int destination_x, unsigned int destination_y)
@@ -45,34 +45,34 @@ boolean DriveTo(unsigned int destination_x, unsigned int destination_y)
 		if(distance > 5)
 		{
 			Move(distance, diff); //distance and diff used for speed control
-myPrint(distance);
-myPrint(diff);
+            myPrint(distance);
+            myPrint(diff);
 		}
 		else
 		{
 			arrived = true;
-		}	
+		}
 	}
 	return arrived;
 }
 
 void Move( int distance, int diff)
-{	
+{
 	//int motor_left, motor_right;
-
+    
 	robot_speed_left = distance - diff;
 	robot_speed_right = distance + diff;
 	// Serial.print(motor_left);
 	// Serial.print("    ");
 	// Serial.println(motor_right);
-
+    
 	setSpeed(robot_speed_right, robot_speed_left); // values between -100 and 100
 }
 
 void SetMotors(int motor_left, int motor_right)
 {
 	int left_speed, right_speed; // value between -100 and 100
-
+    
 	left_speed = motor_left;
 	right_speed = motor_right;
 	setSpeed(left_speed, right_speed);
@@ -82,26 +82,26 @@ void SetMotors(int motor_left, int motor_right)
 void FollowLight(void)
 {
 	int CamPeak,PeakValue;
-
+    
 	CamPeak = LinearCam();
-        PeakValue=LinCam.getMax();
-myPrint(PeakValue);
+    PeakValue=LinCam.getMax();
+    myPrint(PeakValue);
 	if(CamPeak != -100 && PeakValue>LightIntensity)
 	{
 		//Move(25,CamPeak/4);
 		//Serial.println(CamPeak);
-
+        
 		if(abs(CamPeak) < 20)
 		{
 			Move(50,-CamPeak/2);
 			//Serial.println("Tout droit");
-
+            
 		}
 		else
 		{
 			Move(0, copysign(8,-CamPeak) );
 			//Serial.println("Peak trop loin");
-
+            
 		}
 	}
 	else

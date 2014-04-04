@@ -1,5 +1,5 @@
 /*
-Serial communication:
+ Serial communication:
  message: Start byte, data length, data
  RX: pin 0
  TX: pin 1
@@ -13,7 +13,7 @@ void Send2Raspberry(unsigned int* data, unsigned int data_length)
 {
 	unsigned int message_length = 2+data_length;
   	byte message[message_length];
-
+    
  	message[0]=byte(start_byte);
  	message[1]=byte(data_length);
 	for(int i=0;i<data_length;i++)//fill the buffer with the message
@@ -31,7 +31,7 @@ boolean ReceiveFromRaspberry(unsigned int* distance, int* angle, unsigned int* c
 	unsigned int length = 6;
 	byte buffer[length];
 	boolean good_transmission=false;
-
+    
 	if (SerialReceive(buffer, length))
 	{
 		*distance = word(buffer[0],buffer[1]);
@@ -49,7 +49,7 @@ boolean SerialReceive(byte* buffer, unsigned int length)
 	boolean data_ready = false; //True if start byte is detected
 	boolean data_read = false; // True if correct string has been read
 	unsigned int timeout = 100; // Number of while loop before timeout
- 
+    
 	//Serial or Serial1 ???????
 	while(Serial1.available()!= 0 && data_ready==false && timeout) //search for the start byte
 	{
@@ -63,14 +63,14 @@ boolean SerialReceive(byte* buffer, unsigned int length)
 		}
 		timeout--;
 	}
-
+    
 	if(data_ready==true)
-	{             
+	{
 		delay(10);
 		if (Serial1.available()>0)
 		{
 			Serial1.read(); //discard length byte
-
+            
 			if (Serial1.available() >= length)
 			{
 				for (int i=0; i<length; i++)
@@ -81,7 +81,7 @@ boolean SerialReceive(byte* buffer, unsigned int length)
 			}
 		}
 	}
-
+    
 	Serial1.flush();
 	return(data_read);
 }
