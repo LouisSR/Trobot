@@ -14,6 +14,9 @@
 #define STATE_FACE_HOME		4
 #define STATE_GO_HOME		5
 #define STATE_DROP_CUBE		6
+#define LEFT 1
+#define RIGHT 2
+
 
 /* Macros */
 #define RADIANS(a)			( (a)/180.0*M_PI )
@@ -29,6 +32,17 @@ const float delta_t = 0.2; //odometry time in second
 const unsigned int loop_time = 200; //in millisecond
 const unsigned int odometry_timer_interval = 2;
 const int LightIntensity=60;
+<<<<<<< HEAD
+const int array_speed[5][3]={
+  // %, left, right
+  {20,  90,  70},
+  {40,  158, 140},
+  {60,  243, 215},
+  {80,  323, 288},
+  {100, 368, 328},
+};
+=======
+>>>>>>> FETCH_HEAD
 
 
 /* Global Variables */

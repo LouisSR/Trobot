@@ -126,7 +126,7 @@ void loop()
     //delay(4000);
     //Move(100,0);
     //delay(1000);
-    //Move(0,0);
+    //Move(0,20);
 
   OdometryUpdate();
   //Serial.println( CubeDetect() );
@@ -144,8 +144,16 @@ void loop()
   //OdometryUpdate(motor_left, motor_right, 500);
 
 // move calibration
+<<<<<<< HEAD
+//Move(20,0);
+//delay(3000);
+//Move(0,0);
+//delay(3000);
+FaceHome();
+=======
 Move(0,10);
 //FaceHome();
+>>>>>>> FETCH_HEAD
 
 /*
 switch(robot_state)
@@ -230,19 +238,32 @@ boolean TakeCube(void)
 boolean FaceHome(void)
 {
   boolean face_home = false;
+<<<<<<< HEAD
+  float diff = Normalize(RADIANS(90)-position_theta);
+  //myPrint(diff);
+  Serial.println(DEGREES(position_theta));
+  if (abs(diff) > RADIANS(5) )
+  {
+    Move(0,copysign(20,diff));
+=======
   float diff = RADIANS(180)-position_theta;
   //myPrint(diff);
   //Serial.println(DEGREES(position_theta));
   if (abs(diff) > RADIANS(15) )
   {
     Move(0,15);
+>>>>>>> FETCH_HEAD
     //Serial.println("move");
   }
   else
   {
     face_home = true;
     Move(0,0);
+<<<<<<< HEAD
+    Serial.println("true");
+=======
     //Serial.println("true");
+>>>>>>> FETCH_HEAD
   }
 
   return face_home;

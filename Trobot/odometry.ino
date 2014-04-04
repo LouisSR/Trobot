@@ -3,11 +3,17 @@ void OdometryUpdate()
 	unsigned long mytic = millis();
 	unsigned long mytoc;
 	unsigned int new_ground_color;
-	int speed_left = ToMetric(robot_speed_left);
-	int speed_right = ToMetric(robot_speed_right);
+        float speed_left,speed_right;
 
+<<<<<<< HEAD
+        ToMetric( robot_speed_left, robot_speed_right, &speed_left, &speed_right);
+
+	position_theta += (speed_right - speed_left) * delta_t / (wheels_distance*2);
+=======
 	position_theta += wheel_radius * (speed_left - speed_right) * delta_t / (wheels_distance);
+>>>>>>> FETCH_HEAD
 	position_theta = Normalize(position_theta);
+        //myPrint(DEGREES(position_theta));
 	position_x += wheel_radius * (speed_left + speed_right) * delta_t * cos(position_theta) /2.0 ;
 	position_y += wheel_radius * (speed_left + speed_right) * delta_t * sin(position_theta) /2.0 ;
 
@@ -72,9 +78,48 @@ float Normalize(float angle)
 	return(angle);
 }
 
-float ToMetric(float speed)
+void ToMetric(int speed_left, int speed_right, float* metric_speed_left, float* metric_speed_right)
 {
+        *metric_speed_left = FindSpeed(speed_left,LEFT); 
+        *metric_speed_left = FindSpeed(speed_right,RIGHT); 
+}
+
+
+int FindSpeed(int motor_speed, unsigned int side)
+//speed: motor speed
+//side: direction LEFT or RIGHT
+{
+<<<<<<< HEAD
+  int metric_speed;
+        if (motor_speed == 20)
+        {
+                metric_speed = array_speed[0][side];
+        }
+        else if(motor_speed==40)
+        {
+                metric_speed = array_speed[1][side];
+        }
+        else if(motor_speed==60)
+        {
+                metric_speed = array_speed[2][side];
+        }
+        else if(motor_speed==80)
+        {
+                metric_speed = array_speed[3][side];
+        }
+        else if(motor_speed==100)
+        {
+                metric_speed = array_speed[4][side];
+        }
+        else
+        {
+                metric_speed = motor_speed;
+        }
+
+        return metric_speed;
+=======
 	float metric_speed;
 	metric_speed =  speed * robot_max_speed / 100.0; 
 	return metric_speed;
+>>>>>>> FETCH_HEAD
 }
