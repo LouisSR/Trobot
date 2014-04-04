@@ -65,11 +65,8 @@ void Move( int distance, int diff)
 	// Serial.print(motor_left);
 	// Serial.print("    ");
 	// Serial.println(motor_right);
-<<<<<<< HEAD
+
 	setSpeed(robot_speed_right, robot_speed_left); // values between -100 and 100
-=======
-	setSpeed(robot_speed_left, robot_speed_right); // values between -100 and 100
->>>>>>> FETCH_HEAD
 }
 
 void SetMotors(int motor_left, int motor_right)
