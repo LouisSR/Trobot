@@ -14,9 +14,12 @@ void readDistanceIR(unsigned int range[NB_IR_DISTANCE_SENSOR])
     //Wait during capacitor charging ?
     delay(1);
     value = analogRead(IR_SENSOR_OUTPUT);     // read the value from the sensors
-    myPrint(value);
+    //myPrint(i);
+    //myPrint(IR_sensor[i]);
+    //myPrint(value);
     range[i] = multiMap(value, 0);            // interpolate to find the distance
-  } 
+  }
+ 
  //digitalWrite(VDD_IRLED, LOW);//Turn off VDD of IR sensors
  // digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
 }
@@ -47,7 +50,7 @@ unsigned int readGroundColor(void)
   {
     color = GREY;
   }
-  return(value);
+  //return(value);
   return(color);
 } 
 
@@ -63,7 +66,7 @@ unsigned int readStartLED(void)
   delay(1);
   value = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
   digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
-  Serial.println(value);
+  //Serial.println(value);
   if(value < START_LED_OFF)
   {
     status = 0; //OFF
@@ -82,40 +85,56 @@ unsigned int readStartLED(void)
 boolean CubeDetect(void)
 {
   unsigned int status;
-  unsigned int value;
+  unsigned int value_low, value_high;
 
   digitalWrite(ENABLE_MUX, LOW);//Enable Multiplexers
-  digitalWrite(VDD_IRLED, LOW);//Optional: should already be off. Turn off VDD of IR sensors
+  digitalWrite(VDD_IRLED, HIGH);//Optional: should already be off. Turn off VDD of IR sensors
   selectMultiplexer(CUBE_DETECTION_LOW); //Select the sensor to read
   //Wait during capacitor charging ?
   delay(1);
-  value = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
+  value_low = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
+  
+  selectMultiplexer(CUBE_DETECTION_HIGH); //Select the sensor to read
+  delay(1);
+  value_high = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
+  
+  digitalWrite(VDD_IRLED, LOW);//Optional: should already be off. Turn off VDD of IR sensors
   digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
-  myPrint(value);
-  if(value < NO_CUBE)
+  
+  //myPrint( value_low );
+  //myPrint( value_high);
+ 
+  if(value_high > CUBE_DETECTED || value_low > CUBE_DETECTED)
   {
-    status = 0; //Nothing
-  }
-  else if (value>CUBE_DETECTED)
-  {
-    status = 1; //Cube in gripper
+   status = 1; //cube in gripper
   }
   else
   {
-    status = 2; //Not sure
+    status = 0; //no cube
   }
+  
+  //myPrint(status);
+  //Serial.println();
   return(status);
 }
 
 void selectMultiplexer(byte channel)
 /*Select channel: 0-15*/
 {
-
-  digitalWrite( MUX_S0, (channel & B0001) );
+ // digitalWrite( MUX_S0, HIGH );
+   // digitalWrite( MUX_S1, LOW);
+     // digitalWrite( MUX_S2, HIGH );
+       // digitalWrite( MUX_S3, HIGH );
+ // myPrint(234234);
+        
+  digitalWrite( MUX_S0, (channel & B00001) );
+  //myPrint(channel & B00001);
   digitalWrite( MUX_S1, (channel & B00010) );
+  //myPrint(channel & B00010);
   digitalWrite( MUX_S2, (channel & B00100) );
+  //myPrint(channel & B00100);
   digitalWrite( MUX_S3, (channel & B01000) );
-
+  //myPrint(channel & B01000);
 }
 
 unsigned int multiMap(unsigned int val, int sensor)

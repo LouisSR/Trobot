@@ -26,7 +26,7 @@ LinearCamera LinCam = LinearCamera(5); // new instance of the camera, it works o
 
 /* Test variables*/
 int gripper1 = 0;
-int motor_right=10, motor_left=10;
+int motor_right=0, motor_left=0;
 //unsigned char = timer_odometry, timer_UART, timer_obstacles; 
 
 void setup()
@@ -37,17 +37,23 @@ void setup()
   pinMode(ENABLE_MUX, OUTPUT);
   digitalWrite(ENABLE_MUX, HIGH);
   pinMode(LED, OUTPUT); //LED: pin13
-
- // timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
+  
+  pinMode(MUX_S0, OUTPUT);
+  pinMode(MUX_S1, OUTPUT);
+  pinMode(MUX_S2, OUTPUT);
+  pinMode(MUX_S3, OUTPUT);
+  pinMode(IR_SENSOR_OUTPUT, INPUT);
+  
+  //timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
   //timer_UART = setTimer(); //check UART
   //timer_obstacles = setTimer();
 
   Serial.begin(115200);   // open the USB serial port at 115200 bps:
   Serial1.begin(115200);  // open the serial port (pin0-1) at 115200 bps:
-
-
-
-  delay(5200);
+  
+  gripper.attach(SERVO1);
+  OpenGripper();
+  delay(2000);
 }
 
 void loop()
@@ -80,12 +86,12 @@ void loop()
   //Send2Raspberry(data, length);
 
   //Read IR sensors
-  Serial.print("GroundColor: ");
-  Serial.println(readGroundColor());
+  //Serial.print("GroundColor: ");
+  //Serial.println(readGroundColor());
 
-  // Serial.print("IR: ");
-  // readDistanceIR(data);
-  // Serial.println();
+  //Serial.print("IR: ");
+  //readDistanceIR(data);
+  //Serial.println();
   //Wait for the start signal
   //Serial.print("StartLED: ");
   //Serial.println(readStartLED());
@@ -112,13 +118,19 @@ void loop()
     CloseGripper();
      gripper.write(40);
     gripper1 = 1;
-  }*/
+  }
+  */
+  //CloseGripper();
+  //setSpeed(0,0);
+  //OpenGripper();
     //delay(4000);
     //Move(100,0);
     //delay(1000);
     //Move(0,0);
 
-  //OdometryUpdate();
+  OdometryUpdate();
+  //Serial.println( CubeDetect() );
+  //CubeDetect();
 
     // Serial.print("Odometry: ");
     // Serial.print(position_x);
@@ -131,6 +143,9 @@ void loop()
   //Odometry from motor commands integration, ground color
   //OdometryUpdate(motor_left, motor_right, 500);
 
+// move calibration
+Move(0,10);
+//FaceHome();
 
 /*
 switch(robot_state)
@@ -159,10 +174,16 @@ switch(robot_state)
   default: break;
 }
 */
+
   mytoc = millis();
   // Serial.print("Loop time: ");
-  // Serial.println(mytoc-mytic);
-  delay( loop_time-(mytoc-mytic) );
+   //Serial.println(mytoc-mytic);
+  unsigned int wait_time = loop_time - (mytoc-mytic);
+  if(wait_time < loop_time)
+  {
+    delay( wait_time );
+  }
+  
 }
 
 boolean WaitForStart(void)
@@ -179,6 +200,7 @@ boolean WaitForStart(void)
 boolean SearchForCube(void)
 {
   boolean cube_detected = false;
+  //cube_detected=CubeDetect;
   //Send2Raspberry(unsigned int* data, unsigned int data_length);
   //ReceiveFromRaspberry(unsigned int* distance, int* angle, unsigned int* color);
   
@@ -199,6 +221,7 @@ boolean TakeCube(void)
   if ( CubeDetect() )
   {
     CloseGripper();
+    cube_collected = true;
   }
   
   return cube_collected;
@@ -208,13 +231,18 @@ boolean FaceHome(void)
 {
   boolean face_home = false;
   float diff = RADIANS(180)-position_theta;
-  if (abs(diff) > 15 )
+  //myPrint(diff);
+  //Serial.println(DEGREES(position_theta));
+  if (abs(diff) > RADIANS(15) )
   {
-    Move(0,diff*5);
+    Move(0,15);
+    //Serial.println("move");
   }
   else
   {
     face_home = true;
+    Move(0,0);
+    //Serial.println("true");
   }
 
   return face_home;

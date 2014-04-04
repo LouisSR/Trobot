@@ -6,7 +6,7 @@ void OdometryUpdate()
 	int speed_left = ToMetric(robot_speed_left);
 	int speed_right = ToMetric(robot_speed_right);
 
-	position_theta += wheel_radius * (speed_left - speed_right) * delta_t / (2 * wheels_distance);
+	position_theta += wheel_radius * (speed_left - speed_right) * delta_t / (wheels_distance);
 	position_theta = Normalize(position_theta);
 	position_x += wheel_radius * (speed_left + speed_right) * delta_t * cos(position_theta) /2.0 ;
 	position_y += wheel_radius * (speed_left + speed_right) * delta_t * sin(position_theta) /2.0 ;
@@ -20,8 +20,8 @@ void OdometryUpdate()
 	// myPrint(speed_left);
 	// myPrint(position_x);
 	// myPrint(position_y);
-	// myPrint(DEGREES(position_theta));
-
+         //myPrint(DEGREES(position_theta));
+         Serial.println();
 	new_ground_color = readGroundColor();
 
 	if(new_ground_color != color_ground)
@@ -58,6 +58,8 @@ void OdometryUpdate()
 	mytoc = millis();
 	//Serial.print("                           Odometry Time: ");
 	//Serial.println(mytoc-mytic);
+//myPrint(zone);
+//Serial.println();
 }
 
 float Normalize(float angle)

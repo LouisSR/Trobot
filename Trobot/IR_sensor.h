@@ -14,13 +14,13 @@
 #define CUBE_DETECTION_HIGH 13
 
 #define BLACK_GROUND 300 //threshold
-#define WHITE_GROUND 850 //threshold
+#define WHITE_GROUND 750 //threshold
 #define START_LED_ON 900 //threshold
 #define START_LED_OFF 100 //threshold
 #define NO_CUBE 200 //threshold
-#define CUBE_DETECTED 800 //threshold
+#define CUBE_DETECTED 900 //threshold
 
-const unsigned int IR_sensor[NB_IR_DISTANCE_SENSOR]={15,13,14};
+const unsigned int IR_sensor[NB_IR_DISTANCE_SENSOR]={15,13,14}; //15 13 14
 const int tab_size = 19;
 const int tab[19][2] =
  //Distance in mm, ADC value

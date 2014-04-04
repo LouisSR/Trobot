@@ -3,8 +3,8 @@
 #define GREY 2
 #define HOME_WHITE 2
 #define HOME_BLACK 3
-#define GRIPPER_OPEN 125
-#define GRIPPER_CLOSED 40
+#define GRIPPER_OPEN 40
+#define GRIPPER_CLOSED 125
 
 /* Robot state */
 #define STATE_WAIT_START	0
@@ -22,16 +22,18 @@
 /* Constant */
 const unsigned int wheel_radius = 35;
 const unsigned int wheels_distance = 160; //distance between wheels
-const unsigned int robot_max_speed = 380; //370 mm/s
+const unsigned int robot_max_speed = 380; //380 mm/s
 const int field_length = 3000;
 const int field_width = 2000;
-const float delta_t = 0.2; //odometry time
-const unsigned int loop_time = 100;
+const float delta_t = 0.2; //odometry time in second
+const unsigned int loop_time = 200; //in millisecond
 const unsigned int odometry_timer_interval = 2;
+const int LightIntensity=60;
 
 
 /* Global Variables */
-unsigned int robot_state = STATE_WAIT_START;
+//unsigned int robot_state = STATE_WAIT_START;
+unsigned int robot_state = STATE_TAKE_CUBE;
 int robot_speed_left = 0, robot_speed_right = 0; //motor speed
 float position_x=100;
 float position_y=0;
