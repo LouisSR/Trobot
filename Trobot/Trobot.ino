@@ -68,22 +68,24 @@ void loop()
     
     
     //Check UART
+    /*
+     if (ReceiveFromRaspberry(&distance, &angle, &color))
+     {
+     
+     Serial.print("Receive: ");
+     Serial.print(distance);
+     Serial.print("  ");
+     Serial.print(angle);
+     Serial.print("  ");
+     Serial.println(color);
+     
+     }
+     else
+     {
+     Serial.println("Nothing");
+     }
+     */
     
-    if (ReceiveFromRaspberry(&distance, &angle, &color))
-    {
-        
-        Serial.print("Receive: ");
-        Serial.print(distance);
-        Serial.print("  ");
-        Serial.print(angle);
-        Serial.print("  ");
-        Serial.println(color);
-        
-    }
-    else
-    {
-        Serial.println("Nothing");
-    }
     
     //Send color to track
     //Send2Raspberry(&color , 1);
@@ -93,8 +95,8 @@ void loop()
     //readDistanceIR(data);
     //Serial.println();
     //Wait for the start signal
-    //Serial.print("StartLED: ");
-    //Serial.println(readStartLED());
+    Serial.print("StartLED: ");
+    Serial.println(readStartLED());
     //if ( WaitForStart() == 0 )
     //{
     //  Move(20,0);
@@ -107,7 +109,7 @@ void loop()
     //FollowLight();
     
     
-    //OdometryUpdate();
+    OdometryUpdate();
     //Serial.println("loop");
     //Serial.println( CubeDetect() );
     //CubeDetect();
@@ -135,38 +137,42 @@ void loop()
     
     //FaceHome();
     
+    
     /*
-     
-     switch(robot_state)
-     {
-     case STATE_WAIT_START: if( WaitForStart() )
-     robot_state = STATE_SEARCH_CUBE;
-     break;
-     case STATE_SEARCH_CUBE: if( SearchForCube() )
-     robot_state = STATE_GO2CUBE;
-     break;
-     case STATE_GO2CUBE: if( Go2Cube() )
-     robot_state = STATE_TAKE_CUBE;
-     break;
-     case STATE_TAKE_CUBE: if( TakeCube() )
-     robot_state = STATE_FACE_HOME;
-     break;
-     case STATE_FACE_HOME: if( FaceHome() )
-     robot_state = STATE_GO_HOME;
-     break;
-     case STATE_GO_HOME: if( GoHome() )
-     robot_state = STATE_DROP_CUBE;
-     break;
-     case STATE_DROP_CUBE: if( DropCube() )
-     robot_state = STATE_ROTATE;
-     break;
-     case STATE_ROTATE: if( Rotate() )
-     robot_state = STATE_SEARCH_CUBE;
-     break;
-     default: break;
-     }
-     
-     */
+    switch(robot_state)
+    {
+        case STATE_WAIT_START: if( WaitForStart() )
+            robot_state = STATE_SEARCH_CUBE;
+            break;
+        case STATE_SEARCH_CUBE: if( SearchForCube() )
+            robot_state = STATE_ROTATE2CUBE;
+            break;
+        case STATE_ROTATE2CUBE: if( Rotate2Cube() )
+            robot_state = STATE_GO2CUBE;
+            break;
+        case STATE_GO2CUBE: if( Go2Cube() )
+            robot_state = STATE_TAKE_CUBE;
+            break;
+        case STATE_TAKE_CUBE: if( TakeCube() )
+            robot_state = STATE_FACE_HOME;
+            break;
+        case STATE_FACE_HOME: if( FaceHome() )
+            robot_state = STATE_GO_HOME;
+            break;
+        case STATE_GO_HOME: if( GoHome() )
+            robot_state = STATE_DROP_CUBE;
+            break;
+        case STATE_DROP_CUBE: if( DropCube() )
+            robot_state = STATE_ROTATE;
+            break;
+        case STATE_ROTATE: if( Rotate() )
+            robot_state = STATE_SEARCH_CUBE;
+            break;
+        default: break;
+    }
+    
+    */
+    
     //Serial.print("State ");
     //Serial.println(robot_state);
     mytoc = millis();
@@ -187,14 +193,14 @@ boolean WaitForStart(void)
     //Send2Raspberry(unsigned int* data, unsigned int data_length);
     
     led_off = readStartLED();
-    
+    Serial.println(led_off);
     return led_off;
 }
 
 boolean SearchForCube(void)
 {
     boolean cube_targeted = false;
-    unsigned int distance;
+    unsigned int distance = 30000;
     int angle;
     //cube_targeted=CubeDetect;
     //Send2Raspberry(unsigned int* data, unsigned int data_length);
@@ -206,7 +212,7 @@ boolean SearchForCube(void)
     }
     else
     {
-        Move(20,0);// Recherche aleatoire
+        Move(20,0);// Recherche aleatoires
     }
     
     return cube_targeted;
@@ -222,7 +228,7 @@ boolean Rotate2Cube(void)
     ReceiveFromRaspberry( &distance, &angle, &color);
     if(distance!=30000)
     {
-        mapped_angle=map(angle, -400 , 400 , -100,100);
+        mapped_angle=map(angle, -250 , 250 , -100,100);
         
         if (abs(mapped_angle)>20)
         {
@@ -254,7 +260,7 @@ boolean Go2Cube(void)
     if(distance!=30000)
     {
         mapped_distance=map(distance, 0 , 400 ,0,100);
-        mapped_angle=map(angle, -400 , 400 , -100,100);
+        mapped_angle=map(angle, -250 , 250 , -100,100);
         
         if (mapped_distance>distance_limite)
         {
@@ -262,8 +268,16 @@ boolean Go2Cube(void)
         }
         else
         {
-            Move(40,0);
-            cube_here = true;
+            //viser pour que le cube soit en face
+            if (abs(mapped_angle)>20)
+            {
+                Move(0,copysign(20,mapped_angle));
+            }
+            else
+            {
+                Move(40,0);
+                cube_here = true;
+            }
         }
     }
     else
@@ -277,6 +291,8 @@ boolean Go2Cube(void)
             compteur_securite=0;
         }
     }
+    
+    
     
     return cube_here;
 }

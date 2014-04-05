@@ -9,7 +9,7 @@
 
 #define GROUND_COLOR_SENSOR 12 //Mux Channel of ground color sensor
 #define START_LED 10 // Mux channel of start led
-#define NB_IR_DISTANCE_SENSOR 3 //Number of IR sensor for distance measuring
+#define NB_IR_DISTANCE_SENSOR 2 //Number of IR sensor for distance measuring
 #define CUBE_DETECTION_LOW 11
 #define CUBE_DETECTION_HIGH 13
 
@@ -20,7 +20,9 @@
 #define NO_CUBE 200 //threshold
 #define CUBE_DETECTED 900 //threshold
 
-const unsigned int IR_sensor[NB_IR_DISTANCE_SENSOR]={15,13,14}; //15 13 14
+const unsigned int IR_sensor[NB_IR_DISTANCE_SENSOR]={15,14}; //15 13 14
+const int treshold_distance=200;
+const int limite=5;
 const int tab_size = 19;
 const int tab[19][2] =
  //Distance in mm, ADC value

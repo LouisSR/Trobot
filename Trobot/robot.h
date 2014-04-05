@@ -9,12 +9,13 @@
 /* Robot state */
 #define STATE_WAIT_START	0
 #define STATE_SEARCH_CUBE	1
-#define STATE_GO2CUBE		2
-#define STATE_TAKE_CUBE		3
-#define STATE_FACE_HOME		4
-#define STATE_GO_HOME		5
-#define STATE_DROP_CUBE		6
-#define STATE_ROTATE		7
+#define STATE_ROTATE2CUBE   2
+#define STATE_GO2CUBE		3
+#define STATE_TAKE_CUBE		4
+#define STATE_FACE_HOME		5
+#define STATE_GO_HOME		6
+#define STATE_DROP_CUBE		7
+#define STATE_ROTATE		8
 
 #define LEFT 1
 #define RIGHT 2
@@ -49,8 +50,8 @@ const int array_speed[5][3]={
 
 
 /* Global Variables */
-//unsigned int robot_state = STATE_WAIT_START;
-unsigned int robot_state = STATE_TAKE_CUBE;
+unsigned int robot_state = STATE_WAIT_START;
+//unsigned int robot_state = STATE_TAKE_CUBE;
 int robot_speed_left = 0, robot_speed_right = 0; //motor speed
 float position_x=100;
 float position_y=0;

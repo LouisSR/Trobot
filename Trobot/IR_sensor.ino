@@ -20,8 +20,46 @@ void readDistanceIR(unsigned int range[NB_IR_DISTANCE_SENSOR])
         range[i] = multiMap(value, 0);            // interpolate to find the distance
     }
     
-    //digitalWrite(VDD_IRLED, LOW);//Turn off VDD of IR sensors
-    // digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
+    digitalWrite(VDD_IRLED, LOW);//Turn off VDD of IR sensors
+    digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
+}
+
+void obstacleAvoid(void)
+{
+    unsigned int distance[NB_IR_DISTANCE_SENSOR];
+    static int compteur=0;
+    static int compteur_recule=0;
+    static int compteur_tourne=0;
+    readDistanceIR(distance);
+    
+    if (distance[0] < treshold_distance || distance[1] < treshold_distance )
+    {
+        Move(0,0);
+        compteur++;
+    }
+    else
+    {
+        compteur=0;
+    }
+    if (compteur==limite)
+    {
+     //rentre à la maison
+        Move(-20,0);
+        compteur_recule++;
+        if (compteur_recule==2)
+        {
+            robot_state=STATE_FACE_HOME;
+            compteur_recule=0;
+            Move(0,20);//tourne
+            compteur_tourne++;
+        }
+        if (compteur_tourne==2)
+        {
+            compteur_tourne=0;
+            Move(40,0);
+        }
+        
+    }
 }
 
 unsigned int readGroundColor(void)
@@ -60,13 +98,14 @@ unsigned int readStartLED(void)
     unsigned int value;
     
     digitalWrite(ENABLE_MUX, LOW);//Enable Multiplexers
-    digitalWrite(VDD_IRLED, LOW);//Optional: should already be off. Turn off VDD of IR sensors
+    digitalWrite(VDD_IRLED, HIGH);//Optional: should already be off. Turn off VDD of IR sensors
     selectMultiplexer(START_LED); //Select the sensor to read
     //Wait during capacitor charging ?
     delay(1);
     value = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
+    digitalWrite(VDD_IRLED, LOW);//Optional: should already be off. Turn off VDD of IR sensors
     digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
-    //Serial.println(value);
+    myPrint(value);
     if(value < START_LED_OFF)
     {
         status = 0; //OFF
