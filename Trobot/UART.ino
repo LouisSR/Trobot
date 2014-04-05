@@ -19,11 +19,17 @@ void Send2Raspberry(unsigned int* data, unsigned int data_length)
 	for(int i=0;i<data_length;i++)//fill the buffer with the message
 	{
 	    message[i+2]=byte(data[i]);
+        //Serial.println("i");
+        //Serial.println(i);
 	}
+    
 	Serial1.write(message, message_length);
-	Serial.print("Message: "); // print for control on computer
-	Serial.write(message, message_length);
-	Serial.println();
+	//Serial.print("Message: "); // print for control on computer
+    //Serial.print(message[1]);
+    //Serial.print(message[2]);
+    //Serial.print(message[3]);
+	//Serial.write(message, message_length);
+	//Serial.println();
 }
 
 boolean ReceiveFromRaspberry(unsigned int* distance, int* angle, unsigned int* color)
@@ -82,6 +88,6 @@ boolean SerialReceive(byte* buffer, unsigned int length)
 		}
 	}
     
-	Serial1.flush();
+	//Serial1.flush();
 	return(data_read);
 }

@@ -30,6 +30,8 @@ const unsigned int wheels_distance = 160; //distance between wheels
 const unsigned int robot_max_speed = 380; //380 mm/s
 const int field_length = 3000;
 const int field_width = 2000;
+const int distance_limite = 0;
+const int valeur_limite_compteur = 10;
 const float delta_t = 0.2; //odometry time in second
 const unsigned int loop_time = 200; //in millisecond
 const unsigned int odometry_timer_interval = 2;
@@ -55,5 +57,6 @@ float position_y=0;
 float position_theta=0;
 unsigned int zone=0;
 unsigned int color_ground=GREY;
+unsigned int color=0;
 unsigned int myHome=0;
 unsigned int timer_odometry; //timer Variables
