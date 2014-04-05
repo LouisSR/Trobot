@@ -14,6 +14,8 @@
 #define STATE_FACE_HOME		4
 #define STATE_GO_HOME		5
 #define STATE_DROP_CUBE		6
+#define STATE_ROTATE		7
+
 #define LEFT 1
 #define RIGHT 2
 
@@ -32,7 +34,7 @@ const float delta_t = 0.2; //odometry time in second
 const unsigned int loop_time = 200; //in millisecond
 const unsigned int odometry_timer_interval = 2;
 const int LightIntensity=60;
-
+const int array_speed_size = 5;
 const int array_speed[5][3]={
   // %, left, right
   {20,  90,  70},

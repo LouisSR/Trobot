@@ -58,9 +58,9 @@ void setup()
 
 void loop()
 {
+    //Variable declaration
     unsigned long mytic = millis();
     unsigned long mytoc;
-    //Variable declaration
     unsigned int length=2;
     unsigned int data[NB_IR_DISTANCE_SENSOR];
     unsigned int distance, color=55;
@@ -85,9 +85,6 @@ void loop()
     //Send color to track
     //Send2Raspberry(data, length);
     
-    //Read IR sensors
-    //Serial.print("GroundColor: ");
-    //Serial.println(readGroundColor());
     
     //Serial.print("IR: ");
     //readDistanceIR(data);
@@ -105,30 +102,10 @@ void loop()
     //Serial.println(LinearCam());
     //LinearCam();
     //FollowLight();
-    
-    //Open or close the gripper
-    /*if(gripper1 == 1)
-     {
-     OpenGripper();
-     gripper.write(125);
-     gripper1 = 0;
-     }
-     else
-     {
-     CloseGripper();
-     gripper.write(40);
-     gripper1 = 1;
-     }
-     */
-    //CloseGripper();
-    //setSpeed(0,0);
-    //OpenGripper();
-    //delay(4000);
-    //Move(100,0);
-    //delay(1000);
-    //Move(0,20);
+
     
     OdometryUpdate();
+    //Serial.println("loop");
     //Serial.println( CubeDetect() );
     //CubeDetect();
     
@@ -149,40 +126,46 @@ void loop()
     //delay(3000);
     //Move(0,0);
     //delay(3000);
-    FaceHome();
-    
-    //Move(0,10);
     //FaceHome();
     
+    //Move(0,10);
+    
+    //FaceHome();
     
     /*
-     switch(robot_state)
-     {
-     case STATE_WAIT_START: if( WaitForStart() )
-     robot_state = STATE_SEARCH_CUBE;
-     break;
-     case STATE_SEARCH_CUBE: if( SearchForCube() )
-     robot_state = STATE_GO2CUBE;
-     break;
-     case STATE_GO2CUBE: if( Go2Cube() )
-     robot_state = STATE_TAKE_CUBE;
-     break;
-     case STATE_TAKE_CUBE: if( TakeCube() )
-     robot_state = STATE_FACE_HOME;
-     break;
-     case STATE_FACE_HOME: if( FaceHome() )
-     robot_state = STATE_GO_HOME;
-     break;
-     case STATE_GO_HOME: if( GoHome() )
-     robot_state = STATE_DROP_CUBE;
-     break;
-     case STATE_DROP_CUBE: if( DropCube() )
-     robot_state = STATE_SEARCH_CUBE;
-     break;
-     default: break;
-     }
-     */
     
+    switch(robot_state)
+    {
+        case STATE_WAIT_START: if( WaitForStart() )
+            robot_state = STATE_SEARCH_CUBE;
+            break;
+        case STATE_SEARCH_CUBE: if( SearchForCube() )
+            robot_state = STATE_GO2CUBE;
+            break;
+        case STATE_GO2CUBE: if( Go2Cube() )
+            robot_state = STATE_TAKE_CUBE;
+            break;
+        case STATE_TAKE_CUBE: if( TakeCube() )
+            robot_state = STATE_FACE_HOME;
+            break;
+        case STATE_FACE_HOME: if( FaceHome() )
+            robot_state = STATE_GO_HOME;
+            break;
+        case STATE_GO_HOME: if( GoHome() )
+            robot_state = STATE_DROP_CUBE;
+            break;
+        case STATE_DROP_CUBE: if( DropCube() )
+            robot_state = STATE_ROTATE;
+            break;
+        case STATE_ROTATE: if( Rotate() )
+            robot_state = STATE_SEARCH_CUBE;
+            break;
+        default: break;
+    }
+    
+    */
+    //Serial.print("State ");
+    //Serial.println(robot_state);
     mytoc = millis();
     // Serial.print("Loop time: ");
     //Serial.println(mytoc-mytic);
@@ -207,12 +190,12 @@ boolean WaitForStart(void)
 
 boolean SearchForCube(void)
 {
-    boolean cube_detected = false;
-    //cube_detected=CubeDetect;
+    boolean cube_targeted = false;
+    //cube_targeted=CubeDetect;
     //Send2Raspberry(unsigned int* data, unsigned int data_length);
     //ReceiveFromRaspberry(unsigned int* distance, int* angle, unsigned int* color);
     
-    return cube_detected;
+    return cube_targeted;
 }
 
 boolean Go2Cube(void)
@@ -238,10 +221,11 @@ boolean TakeCube(void)
 boolean FaceHome(void)
 {
     boolean face_home = false;
+    float diff = Normalize(RADIANS(180)-position_theta);
     
-    float diff = Normalize(RADIANS(90)-position_theta);
-    //myPrint(diff);
+    myPrint(diff);
     Serial.println(DEGREES(position_theta));
+   
     if (abs(diff) > RADIANS(5) )
     {
         Move(0,copysign(20,diff));
@@ -278,41 +262,53 @@ boolean GoHome(void)
 
 boolean DropCube(void)
 {
-    boolean cube_dropped = false;
+    boolean cube_dropped = true;
     
-    Move(50,0);//enter the Grey Zone
-    delay(200);
+    Move(60,0);//enter the Grey Zone
+    delay(500);
     
     OpenGripper();
     
     //step back
-    Move(-50,0);
-    delay(200);
-    
-    if( abs(position_theta) > RADIANS(5) ) 
-    {
-        Move(0,position_theta); //rotate
-    }
-    else
-    {
-        // Reset odometry
-        cube_dropped = true;
-    }
+    Move(-60,0);
+    delay(1000);
     
     return cube_dropped;
 }
 
-// void sendPlotData(String seriesName, int data)
-// {
-//   Serial.print("{");
-//   Serial.print(seriesName);
-//   Serial.print(",T,");
-//   Serial.print(data);
-//   Serial.println("}");
-// }
+boolean Rotate(void)
+{
+    boolean rotated = false;
+    
+    if( abs(position_theta) > RADIANS(5) )
+    {
+        Move(0,copysign(20,-position_theta)); //rotate
+        //Serial.println(position_theta);
+        
+    }
+    else
+    {
+        // Reset odometry
+        rotated = true;
+        Move(0,0);
+    }
+    
+    return rotated;
+}
 
 void myPrint(float data)
 {
     Serial.print(data);
     Serial.print(" \t");
 }
+
+/*
+ void sendPlotData(String seriesName, int data)
+ {
+ Serial.print("{");
+ Serial.print(seriesName);
+ Serial.print(",T,");
+ Serial.print(data);
+ Serial.println("}");
+ }
+ */

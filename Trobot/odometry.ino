@@ -6,10 +6,15 @@ void OdometryUpdate()
     float speed_left,speed_right;
     
     ToMetric( robot_speed_left, robot_speed_right, &speed_left, &speed_right);
-    
-	position_theta += (speed_right - speed_left) * delta_t / (wheels_distance*2);
+    //myPrint(robot_speed_left);
+    //myPrint(robot_speed_right);
+    //myPrint(speed_left);
+    //myPrint(speed_right);
+    //Serial.println();
+	position_theta += (speed_right - speed_left) * delta_t / (wheels_distance);
 	position_theta = Normalize(position_theta);
     //myPrint(DEGREES(position_theta));
+    
 	position_x += wheel_radius * (speed_left + speed_right) * delta_t * cos(position_theta) /2.0 ;
 	position_y += wheel_radius * (speed_left + speed_right) * delta_t * sin(position_theta) /2.0 ;
     
@@ -23,7 +28,7 @@ void OdometryUpdate()
 	// myPrint(position_x);
 	// myPrint(position_y);
     //myPrint(DEGREES(position_theta));
-    Serial.println();
+    //Serial.println();
 	new_ground_color = readGroundColor();
     
 	if(new_ground_color != color_ground)
@@ -77,7 +82,7 @@ float Normalize(float angle)
 void ToMetric(int speed_left, int speed_right, float* metric_speed_left, float* metric_speed_right)
 {
     *metric_speed_left = FindSpeed(speed_left,LEFT);
-    *metric_speed_left = FindSpeed(speed_right,RIGHT);
+    *metric_speed_right = FindSpeed(speed_right,RIGHT);
 }
 
 
@@ -88,30 +93,51 @@ int FindSpeed(int motor_speed, unsigned int side)
     int metric_speed;
     int motor_speed_abs = abs(motor_speed);
     
-    if (motor_speed_abs == 20)
-    {
-        metric_speed = array_speed[0][side];
-    }
-    else if(motor_speed_abs==40)
-    {
-        metric_speed = array_speed[1][side];
-    }
-    else if(motor_speed_abs==60)
-    {
-        metric_speed = array_speed[2][side];
-    }
-    else if(motor_speed_abs==80)
-    {
-        metric_speed = array_speed[3][side];
-    }
-    else if(motor_speed_abs==100)
-    {
-        motor_speed_abs = array_speed[4][side];
-    }
-    else
-    {
-        metric_speed = motor_speed;
-    }
-    copysign(metric_speed, motor_speed);
+    metric_speed = multiMapOdom(motor_speed_abs, side);
+    
+//    if (motor_speed_abs == 20)
+//    {
+//        metric_speed = array_speed[0][side];
+//    }
+//    else if(motor_speed_abs==40)
+//    {
+//        metric_speed = array_speed[1][side];
+//    }
+//    else if(motor_speed_abs==60)
+//    {
+//        metric_speed = array_speed[2][side];
+//    }
+//    else if(motor_speed_abs==80)
+//    {
+//        metric_speed = array_speed[3][side];
+//    }
+//    else if(motor_speed_abs==100)
+//    {
+//        motor_speed_abs = array_speed[4][side];
+//    }
+//    else
+//    {
+//        metric_speed = motor_speed;
+//    }
+    metric_speed = copysign(metric_speed, motor_speed);
     return metric_speed;
+}
+
+unsigned int multiMapOdom(unsigned int val, int column)
+//val value to interpolate, array_speed: LUT, lut_size: lenght of LUT, column:
+{
+    // take care the value is within range
+    // val = constrain(val, _in[0], _in[size-1]);
+    if (val <= array_speed[0][0]) return array_speed[0][column];
+    if (val >= array_speed[array_speed_size-1][0]) return array_speed[array_speed_size-1][column];
+    
+    // search right interval
+    uint8_t pos = 1;  // _in[0] allready tested
+    while(val > array_speed[pos][0]) pos++;
+    
+    // this will handle all exact "points" in the _in array
+    if (val == array_speed[pos][0]) return array_speed[pos][column];
+    
+    // interpolate in the right segment for the rest
+    return map(val, array_speed[pos-1][0], array_speed[pos][0], array_speed[pos-1][column], array_speed[pos][column]);
 }

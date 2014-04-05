@@ -22,8 +22,34 @@ void CloseGripper(void)
     //timer_odometry = setTimer(OdometryUpdate, odometry_timer_interval ); //share timer with Servo
 }
 
+void Move( int distance, int diff)
+{
+	//int motor_left, motor_right;
+    
+	robot_speed_left = distance - diff;
+	robot_speed_right = distance + diff;
+	// Serial.print(motor_left);
+	// Serial.print("    ");
+	// Serial.println(motor_right);
+    
+	setSpeed(robot_speed_right, robot_speed_left); // values between -100 and 100
+}
+
+/*
+void SetMotors(int motor_left, int motor_right)
+{
+	int left_speed, right_speed; // value between -100 and 100
+    
+	left_speed = motor_left;
+	right_speed = motor_right;
+	setSpeed(left_speed, right_speed);
+	delay(100); // wait at least 100ms or the setting won't have any effect before the next setting
+}
+*/
+
+/*
 boolean DriveTo(unsigned int destination_x, unsigned int destination_y)
-/* Absolute coordinates*/
+//Absolute coordinates
 {
 	boolean arrived = false;
 	unsigned int distance;
@@ -55,58 +81,4 @@ boolean DriveTo(unsigned int destination_x, unsigned int destination_y)
 	}
 	return arrived;
 }
-
-void Move( int distance, int diff)
-{
-	//int motor_left, motor_right;
-    
-	robot_speed_left = distance - diff;
-	robot_speed_right = distance + diff;
-	// Serial.print(motor_left);
-	// Serial.print("    ");
-	// Serial.println(motor_right);
-    
-	setSpeed(robot_speed_right, robot_speed_left); // values between -100 and 100
-}
-
-void SetMotors(int motor_left, int motor_right)
-{
-	int left_speed, right_speed; // value between -100 and 100
-    
-	left_speed = motor_left;
-	right_speed = motor_right;
-	setSpeed(left_speed, right_speed);
-	delay(100); // wait at least 100ms or the setting won't have any effect before the next setting
-}
-
-void FollowLight(void)
-{
-	int CamPeak,PeakValue;
-    
-	CamPeak = LinearCam();
-    PeakValue=LinCam.getMax();
-    myPrint(PeakValue);
-	if(CamPeak != -100 && PeakValue>LightIntensity)
-	{
-		//Move(25,CamPeak/4);
-		//Serial.println(CamPeak);
-        
-		if(abs(CamPeak) < 20)
-		{
-			Move(50,-CamPeak/2);
-			//Serial.println("Tout droit");
-            
-		}
-		else
-		{
-			Move(0, copysign(8,-CamPeak) );
-			//Serial.println("Peak trop loin");
-            
-		}
-	}
-	else
-	{
-		Move(0, 4);
-		//(Serial.println("No Peak");
-	}
-}
+*/

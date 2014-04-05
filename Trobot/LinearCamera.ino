@@ -33,3 +33,31 @@ int LinearCam(void)
     
 	return (LinCamPeak);
 }
+
+void FollowLight(void)
+{
+	int CamPeak, PeakValue;
+    
+	CamPeak = LinearCam();
+    //PeakValue=(LinCam.getMax()-LinCam.getAverage());
+    PeakValue=(LinCam.getMax());
+    //Serial.println(LinCam.getMax());
+	if(CamPeak != -100 && PeakValue > 100)
+	{
+		//Move(25,CamPeak/4);
+		//Serial.println(CamPeak);
+        
+		
+        Move(80,CamPeak);
+        //Serial.println("Tout droit");
+        
+		
+		
+	}
+	else
+	{
+		Move(0, 30);
+		//(Serial.println("No Peak");
+        //penser a faire en sorte qu'il tourne tout seul du bon côté en fonction de l'erreur systématique qu'il fait
+	}
+}
