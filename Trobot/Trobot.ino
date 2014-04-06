@@ -53,7 +53,7 @@ void setup()
     
     gripper.attach(SERVO1);
     OpenGripper();
-    delay(2000);
+    delay(1000);
 }
 
 void loop()
@@ -110,10 +110,12 @@ void loop()
     
     
     OdometryUpdate();
+    
+    
     //Serial.println("loop");
     //Serial.println( CubeDetect() );
     //CubeDetect();
-    
+    //TakeCube();
     // Serial.print("Odometry: ");
     // Serial.print(position_x);
     // Serial.print("  ");
@@ -136,6 +138,10 @@ void loop()
     //Rotate2Cube();
     //FaceHome();
     //SearchForCube();
+    //Go2Cube();
+//   FaceLight();
+    
+  //  GoHome();
 //    
 //    myPrint(position_x);
 //    myPrint(position_y);
@@ -150,7 +156,7 @@ void loop()
 //        Move(0,0);
 //    }
     
-   /*
+   
     switch(robot_state)
     {
         case STATE_WAIT_START: if( WaitForStart() )
@@ -168,7 +174,8 @@ void loop()
         case STATE_TAKE_CUBE: if( TakeCube() )
             robot_state = STATE_FACE_HOME;
             break;
-        case STATE_FACE_HOME: if( FaceHome() )
+        case STATE_FACE_HOME:
+            demiTourGauche();
             robot_state = STATE_GO_HOME;
             break;
         case STATE_GO_HOME: if( GoHome() )
@@ -177,15 +184,18 @@ void loop()
         case STATE_DROP_CUBE: if( DropCube() )
             robot_state = STATE_ROTATE;
             break;
-        case STATE_ROTATE: if( Rotate() )
+        case STATE_ROTATE:
+            demiTourGauche();
             robot_state = STATE_SEARCH_CUBE;
             break;
         default: break;
     }
-    */
+   
     
-    demiTourDroite();
-    delay(3000);
+    //demiTourGauche();
+    //Move(0,0);
+    //delay(3000);
+    
     
     //Serial.print("State ");
     //Serial.println(robot_state);
@@ -224,26 +234,31 @@ boolean SearchForCube(void)
     if(distance!=30000)
     {
         cube_targeted=true;
-        Serial.println("cube not targeted");
+        Serial.println("cube targeted");
     }
-    else
-    {
-        // Recherche aleatoires
-        if (sens_rotation==true)
-        {
-            Move(0,10);
-        }
-        else
-        {
-            Move(0,-10);
-        }
-        if (abs(position_theta)>RADIANS(40))
-        {
-            sens_rotation= !sens_rotation;
-        }
-    }
+//    else
+//    {
+//        Serial.println("cube not targeted");
+//        Move(0,0);
+//        /*
+//        Serial.println("cube_targeted");
+//        // Recherche aleatoires
+//        if (sens_rotation==true)
+//        {
+//            Move(0,10);
+//        }
+//        else
+//        {
+//            Move(0,-10);
+//        }
+//        if (abs(position_theta)>RADIANS(50))
+//        {
+//            sens_rotation= !sens_rotation;
+//        }
+//         */
+//    }
     Serial.println(DEGREES(position_theta));
-    Serial.println("cube_targeted");
+    
     return cube_targeted;
 }
 
@@ -266,7 +281,7 @@ boolean Rotate2Cube(void)
         myPrint(angle);
         myPrint(mapped_angle);
         
-        if (abs(mapped_angle)>20)
+        if (abs(mapped_angle)>10)
         {
             Move(0,copysign(10,mapped_angle));
             Serial.print(" Rotate");
@@ -278,10 +293,11 @@ boolean Rotate2Cube(void)
             Move(0,0);
         }
     }
-    else
-    {
-        robot_state = STATE_SEARCH_CUBE; //No cube detected
-    }
+ //   else
+ //   {
+ //       Move(0,0);
+ //       //robot_state = STATE_SEARCH_CUBE; //No cube detected
+ //   }
     
     return cube_there;
 }
@@ -310,39 +326,37 @@ boolean Go2Cube(void)
         
         if (mapped_distance>distance_limite)
         {
-            Move(60, mapped_angle);
+            Move(20,mapped_angle/8);
             Serial.print(" Avance ");
         }
         else
         {
             //viser pour que le cube soit en face
-            if (abs(mapped_angle)>20)
-            {
-                Move(0,copysign(20,mapped_angle));
-                Serial.print(" Tourne ");
-            }
-            else
-            {
+//            if (abs(mapped_angle)>20)
+//            {
+//                Move(0,copysign(20,mapped_angle));
+//                Serial.print(" Tourne ");
+//            }
+//            else
+//            {
                 Serial.print(" Cube dans les pinces ");
-                Move(40,0);
+                Move(20,0);
                 cube_here = true;
-            }
+            //}
         }
     }
-    else
-    {
-        compteur_securite++;
-        //Ajouter compteur puis rentrer à la maison
-        if (compteur_securite>valeur_limite_compteur)
-        {
-            robot_state = STATE_SEARCH_CUBE; //Cube lost
-            Move(0,0);
-            compteur_securite=0;
-            Serial.print(" Cube perdu ");
-        }
-    }
-    
-    
+//    else
+//    {
+//        compteur_securite++;
+//        //Ajouter compteur puis rentrer à la maison
+//        if (compteur_securite>valeur_limite_compteur)
+//        {
+//            //robot_state = STATE_SEARCH_CUBE; //Cube lost
+//            Move(0,0);
+//            compteur_securite=0;
+//            Serial.print(" Cube perdu ");
+//        }
+//    }
     
     return cube_here;
 }
@@ -361,7 +375,7 @@ boolean TakeCube(void)
     }
     else
     {
-        Move(40,0);
+        Move(30,0);
         compteur_securite++;
     }
     
@@ -392,7 +406,7 @@ boolean FaceHome(void)
         face_home = true;
         Move(0,0);
         
-        Serial.println("home trouvé");
+        Serial.println("home found");
         
         //Serial.println("true");
         
@@ -434,24 +448,17 @@ boolean DropCube(void)
     return cube_dropped;
 }
 
-boolean Rotate(void)
+void demiTourDroite(void)
 {
-    boolean rotated = false;
-    
-    if( abs(position_theta) > RADIANS(5) )
-    {
-        Move(0,copysign(20,-position_theta)); //rotate
-        //Serial.println(position_theta);
-        
-    }
-    else
-    {
-        // Reset odometry
-        rotated = true;
-        Move(0,0);
-    }
-    
-    return rotated;
+    Move(0,-40);
+    delay(1800);
+    position_theta = Normalize(position_theta + RADIANS(180));
+}
+void demiTourGauche(void)
+{
+    Move(0,40);
+    delay(1850);
+    position_theta = Normalize(position_theta + RADIANS(180));
 }
 
 void myPrint(float data)
@@ -469,10 +476,33 @@ void myPrint(float data)
  Serial.print(data);
  Serial.println("}");
  }
+ 
+ boolean FaceLight(void)
+ {
+ boolean light_faced = false;
+ 
+ light_faced = AlignLight();
+ 
+ }
+ 
+ boolean Rotate(void)
+ {
+ boolean rotated = false;
+ 
+ if( abs(position_theta) > RADIANS(5) )
+ {
+ Move(0,copysign(20,-position_theta)); //rotate
+ //Serial.println(position_theta);
+ 
+ }
+ else
+ {
+ // Reset odometry
+ rotated = true;
+ Move(0,0);
+ }
+ 
+ return rotated;
+ }
+ 
  */
-void demiTourDroite(void)
-{
-    Move(0,-20);
-    delay(500);
-    position_theta+=RADIANS(180);
-}

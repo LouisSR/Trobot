@@ -139,8 +139,8 @@ boolean CubeDetect(void)
     digitalWrite(VDD_IRLED, LOW);//Optional: should already be off. Turn off VDD of IR sensors
     digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
     
-    //myPrint( value_low );
-    //myPrint( value_high);
+    myPrint( value_low );
+    myPrint( value_high);
     
     if(value_high > CUBE_DETECTED || value_low > CUBE_DETECTED)
     {
@@ -152,7 +152,7 @@ boolean CubeDetect(void)
     }
     
     //myPrint(status);
-    //Serial.println();
+    Serial.println();
     return(status);
 }
 

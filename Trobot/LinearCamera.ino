@@ -41,23 +41,53 @@ void FollowLight(void)
 	CamPeak = LinearCam();
     //PeakValue=(LinCam.getMax()-LinCam.getAverage());
     PeakValue=(LinCam.getMax());
-    //Serial.println(LinCam.getMax());
-	if(CamPeak != -100 && PeakValue > 100)
+    Serial.print("CamPEAK ");
+    Serial.print(CamPeak);
+    Serial.print(" ");
+    Serial.println(LinCam.getMax());
+	if(CamPeak != -100 && PeakValue > 140)
 	{
 		//Move(25,CamPeak/4);
-		//Serial.println(CamPeak);
-        
 		
-        Move(80,CamPeak);
+        //Move(60,CamPeak/2);
+        Move(70, copysign(min(30,abs(CamPeak)),CamPeak));
         //Serial.println("Tout droit");
-        
-		
-		
 	}
 	else
 	{
-		Move(0, 30);
+		Move(0, 20);
 		//(Serial.println("No Peak");
         //penser a faire en sorte qu'il tourne tout seul du bon côté en fonction de l'erreur systématique qu'il fait
 	}
+}
+
+boolean AlignLight(void)
+{
+    boolean aligned = false;
+    int CamPeak, PeakValue;
+    
+	CamPeak = LinearCam();
+    PeakValue=(LinCam.getMax());
+    //myPrint(CamPeak);
+    //Serial.println(PeakValue);
+    if ( PeakValue > 100)
+    {
+        if( abs(CamPeak) < 20)
+        {
+            Move(0,0);//stop
+            Serial.println("Aligned");
+        }
+        else
+        {
+            Move(0,copysign(20,CamPeak) );
+            Serial.println("Alignement");
+            //penser a faire en sorte qu'il tourne tout seul du bon côté en fonction de l'erreur systématique qu'il fait
+        }
+    }
+    else
+    {
+        Move(0, 20);
+        Serial.println("No Peak");
+    }
+    
 }

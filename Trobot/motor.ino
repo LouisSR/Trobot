@@ -25,12 +25,34 @@ void CloseGripper(void)
 void Move( int distance, int diff)
 {
 	//int motor_left, motor_right;
+//    static int iteration = 0;
+//    int add = 0;
+//	   
+//    if(iteration==1)
+//    {
+//        iteration = 0;
+//        add = 1;
+//    }
+//    else
+//    {
+//        iteration++;
+//    }
+//    
+    robot_speed_left = distance - diff;
     
-	robot_speed_left = distance - diff;
-	robot_speed_right = distance + diff;
-	// Serial.print(motor_left);
-	// Serial.print("    ");
-	// Serial.println(motor_right);
+//    if(distance!=0)
+//    {
+//	robot_speed_right = distance + diff+add;
+//    }
+//    else
+//    {
+        robot_speed_right = distance + diff;
+//    }
+    
+    //Serial.println(distance);
+	 Serial.print(robot_speed_left);
+	 Serial.print("    ");
+	 Serial.println(robot_speed_right);
     
 	setSpeed(robot_speed_right, robot_speed_left); // values between -100 and 100
 }

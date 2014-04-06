@@ -18,7 +18,7 @@
 #define START_LED_ON 900 //threshold
 #define START_LED_OFF 100 //threshold
 #define NO_CUBE 200 //threshold
-#define CUBE_DETECTED 900 //threshold
+#define CUBE_DETECTED 950 //threshold
 
 const unsigned int IR_sensor[NB_IR_DISTANCE_SENSOR]={15,14}; //15 13 14
 const int treshold_distance=200;
