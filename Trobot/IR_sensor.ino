@@ -105,19 +105,18 @@ unsigned int readStartLED(void)
     value = analogRead(IR_SENSOR_OUTPUT);  // read the value from the sensors
     digitalWrite(VDD_IRLED, LOW);//Optional: should already be off. Turn off VDD of IR sensors
     digitalWrite(ENABLE_MUX, HIGH);//Disable multiplexer
-    myPrint(value);
+    
+    //myPrint(value);
+    
     if(value < START_LED_OFF)
     {
-        status = 0; //OFF
-    }
-    else if (value>START_LED_ON)
-    {
-        status = 1; //ON
+        status = 1; //OFF
     }
     else
     {
-        status = 2; //Not sure
+        status = 0; //ON
     }
+    
     return(status);
 }
 

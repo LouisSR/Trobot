@@ -15,8 +15,8 @@ void OdometryUpdate()
 	position_theta = Normalize(position_theta);
     //myPrint(DEGREES(position_theta));
     
-	position_x += wheel_radius * (speed_left + speed_right) * delta_t * cos(position_theta) /2.0 ;
-	position_y += wheel_radius * (speed_left + speed_right) * delta_t * sin(position_theta) /2.0 ;
+	position_x += (speed_left + speed_right) * delta_t * cos(position_theta) /4.0 ;
+	position_y += (speed_left + speed_right) * delta_t * sin(position_theta) /4.0 ;
     
 	position_x = constrain(position_x, 0, field_length);
 	position_y = constrain(position_y, -field_width/2, field_width/2);
@@ -86,7 +86,7 @@ void ToMetric(int speed_left, int speed_right, float* metric_speed_left, float* 
 }
 
 
-int FindSpeed(int motor_speed, unsigned int side)
+int FindSpeed(int motor_speed, int side)
 //speed: motor speed
 //side: direction LEFT or RIGHT
 {
@@ -123,7 +123,7 @@ int FindSpeed(int motor_speed, unsigned int side)
     return metric_speed;
 }
 
-unsigned int multiMapOdom(unsigned int val, int column)
+ int multiMapOdom( int val, int column)
 //val value to interpolate, array_speed: LUT, lut_size: lenght of LUT, column:
 {
     // take care the value is within range
