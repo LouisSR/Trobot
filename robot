@@ -1,8 +1,8 @@
 #!/bin/sh
 
-#cd Desktop/robot
+cd /home/pi/Desktop/robot/Python
 
 #Take image with Raspberry Pi camera in background
-sudo raspistill --width 500 --height 500 --timeout 10000 --timelapse 2000 --vflip --nopreview --output ./images/camera.jpg &
+sudo raspistill --width 600 --height 400 --timeout 120000 --timelapse 600 --output /home/pi/Desktop/robot/images/camera.jpg &
 
 sudo python Main.py

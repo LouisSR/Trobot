@@ -94,6 +94,7 @@ int FindSpeed(int motor_speed, int side)
     int motor_speed_abs = abs(motor_speed);
     
     metric_speed = multiMapOdom(motor_speed_abs, side);
+<<<<<<< HEAD
     
 //    if (motor_speed_abs == 20)
 //    {
@@ -124,6 +125,41 @@ int FindSpeed(int motor_speed, int side)
 }
 
  int multiMapOdom( int val, int column)
+=======
+/*
+    if (motor_speed_abs == 20)
+    {
+        metric_speed = array_speed[0][side];
+    }
+    else if(motor_speed_abs==40)
+    {
+        metric_speed = array_speed[1][side];
+    }
+    else if(motor_speed_abs==60)
+    {
+        metric_speed = array_speed[2][side];
+    }
+    else if(motor_speed_abs==80)
+    {
+        metric_speed = array_speed[3][side];
+    }
+    else if(motor_speed_abs==100)
+    {
+        motor_speed_abs = array_speed[4][side];
+    }
+    else
+    {
+        metric_speed = motor_speed;
+    }
+ */
+    copysign(metric_speed, motor_speed);
+    return metric_speed;
+}
+
+
+
+unsigned int multiMapOdom(unsigned int val, int column)
+>>>>>>> Added Python latest code, changed directory and scripts
 //val value to interpolate, array_speed: LUT, lut_size: lenght of LUT, column:
 {
     // take care the value is within range
@@ -140,4 +176,8 @@ int FindSpeed(int motor_speed, int side)
     
     // interpolate in the right segment for the rest
     return map(val, array_speed[pos-1][0], array_speed[pos][0], array_speed[pos-1][column], array_speed[pos][column]);
+<<<<<<< HEAD
 }
+=======
+} 
+>>>>>>> Added Python latest code, changed directory and scripts
